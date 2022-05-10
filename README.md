@@ -2,7 +2,7 @@
   
   # 14-BootStore
   
- <a href="https://celso-mywallet.netlify.app/" target="_blank">
+ <a href="https://14-boot-store.vercel.app/" target="_blank">
     <img src="https://github.com/celso-patiri/14-BootStore/blob/main/frontend/public/logo.png" alt="Logo" width="200"/>
   </a>
   
