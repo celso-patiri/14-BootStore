@@ -21,7 +21,7 @@ import SuccessPage from "./SuccessPage/SuccessPage";
 import OrdersPage from "./OrdersPage/OrdersPage.jsx";
 import OrderPage from "./OrderPage/OrderPage.jsx";
 import { useState } from "react";
-import Theme from "../themes/Theme";
+import Theme from "../styles/themes/Theme";
 
 export default function App() {
     // Config Data
