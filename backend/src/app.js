@@ -3,7 +3,7 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 
-import authRouter from "./routes/auth.router";
+import authRouter from "./routes/auth.router.js";
 
 const app = express();
 

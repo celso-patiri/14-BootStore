@@ -5,7 +5,7 @@ import {
     validateEmailAvailable,
     validateSignInBody,
     validateSignUpBody,
-} from "../../middleware/auth.middleware.js";
+} from "../middleware/auth.middleware.js";
 import { createSession } from "../controllers/session.controller.js";
 import { createUser } from "../controllers/user.controller.js";
 
