@@ -11,6 +11,6 @@ const router = Router();
 
 router.get("/", validateToken, getWishlistByUserId);
 router.put("/", validateToken, updateUserWishlist);
-router.post("/addToCart", validateToken, clearUserWishlist, updateUserCart);
+router.post("/addToCart", validateToken, updateUserCart);
 
 export default router;

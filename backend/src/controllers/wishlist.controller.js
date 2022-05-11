@@ -9,6 +9,6 @@ export const updateUserWishlist = (req, res) => {
 };
 
 export const clearUserWishlist = (req, res, next) => {
-    //todo
+    //todo: remove
     //const {userId, sessionId} = res.locals.userInfo
 };
