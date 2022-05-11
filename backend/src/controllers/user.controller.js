@@ -23,17 +23,23 @@ export const createUser = async (req, res, next) => {
     }
 };
 
-export const findUser = (req, res) => {
+export const findUser = async (req, res) => {
     try {
-        // TODO: find User
+        const { userId } = res.locals.userInfo;
+        const { name, email } = await User.findOne({ _id: userId });
+        if (!email) return res.status(404).send({ error: "User not found" });
+
+        res.status(200).send({ name, email });
     } catch (err) {
         res.status(500).send({ error: err });
     }
 };
 
-export const updateUser = (req, res) => {
+export const updateUser = async (req, res) => {
     try {
-        // TODO: update User
+        const { userId } = res.locals.userInfo;
+        await User.updateOne({ _id: userId }, req.body);
+        res.status(204);
     } catch (err) {
         res.status(500).send({ error: err });
     }
@@ -48,12 +54,4 @@ export const deleteUser = async (req, res) => {
     } catch (err) {
         res.status(500).send({ error: err });
     }
-};
-
-export const validateUserBody = (req, res, next) => {
-    //TODO user Joi validation
-};
-
-export const validateUserId = (req, res, next) => {
-    //TODO
 };

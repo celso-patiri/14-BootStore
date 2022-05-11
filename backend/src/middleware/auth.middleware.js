@@ -15,7 +15,7 @@ const SignInSchema = Joi.object({
     }),
 });
 
-const SignUpSchema = Joi.object({
+const userSchema = Joi.object({
     name: Joi.string().min(2).required().messages({
         "string.min": "Name must be at least 2 characters long",
         "any.required": "Name is required",
@@ -36,8 +36,8 @@ export const validateSignInBody = (req, res, next) => {
     next();
 };
 
-export const validateSignUpBody = (req, res, next) => {
-    const { error } = SignUpSchema.validate(req.body);
+export const validateUserBody = (req, res, next) => {
+    const { error } = userSchema.validate(req.body);
     if (error) return res.status(422).send({ error: error.details[0].message });
     next();
 };
