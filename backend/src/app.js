@@ -4,6 +4,8 @@ import helmet from "helmet";
 import cors from "cors";
 
 import authRouter from "./routes/auth.router.js";
+import productsRouter from "./routes/products.router.js";
+import userRouter from "./routes/user.router.js";
 
 const app = express();
 
@@ -13,5 +15,7 @@ app.use(express.json());
 
 app.get("/", (_req, res) => res.send("Hello world"));
 app.use("/auth", authRouter);
+app.use("/products", productsRouter);
+app.use("/user", userRouter);
 
 export default app;

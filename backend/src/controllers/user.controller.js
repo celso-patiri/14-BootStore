@@ -23,6 +23,14 @@ export const createUser = async (req, res, next) => {
     }
 };
 
+export const findUser = (req, res) => {
+    try {
+        // TODO: find User
+    } catch (err) {
+        res.status(500).send({ error: err });
+    }
+};
+
 export const updateUser = (req, res) => {
     try {
         // TODO: update User
@@ -40,4 +48,8 @@ export const deleteUser = async (req, res) => {
     } catch (err) {
         res.status(500).send({ error: err });
     }
+};
+
+export const validateUserBody = (req, res) => {
+    //TODO user Joi validation
 };
