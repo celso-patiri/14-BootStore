@@ -30,13 +30,13 @@ const SignUpSchema = Joi.object({
 
 export const validateSignInBody = (req, res, next) => {
     const { error } = SignInSchema.validate(req.body);
-    if (error) return res.status(422).send({ error: error.details[0] });
+    if (error) return res.status(422).send({ error: error.details[0].message });
     next();
 };
 
 export const validateSignUpBody = (req, res, next) => {
     const { error } = SignUpSchema.validate(req.body);
-    if (error) return res.status(422).send({ error: error.details[0] });
+    if (error) return res.status(422).send({ error: error.details[0].message });
     next();
 };
 
