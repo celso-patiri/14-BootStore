@@ -50,6 +50,10 @@ export const deleteUser = async (req, res) => {
     }
 };
 
-export const validateUserBody = (req, res) => {
+export const validateUserBody = (req, res, next) => {
     //TODO user Joi validation
+};
+
+export const validateUserId = (req, res, next) => {
+    //TODO
 };

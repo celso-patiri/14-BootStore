@@ -94,3 +94,7 @@ export const validateToken = async (req, res, next) => {
         res.status(500).send({ error: err });
     }
 };
+
+export const validateUserId = (req, res, next) => {
+    //TODO
+};
