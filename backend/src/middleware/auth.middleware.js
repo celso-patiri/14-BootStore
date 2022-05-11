@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import Joi from "joi";
 import { User } from "../models/user.model.js";
+import { Session } from "../models/session.model.js";
 
 const SignInSchema = Joi.object({
     email: Joi.string().email().required().messages({
@@ -66,6 +68,26 @@ export const validateEmailAvailable = async (req, res, next) => {
     try {
         const existingUser = await User.findOne({ email });
         if (existingUser) return res.status(401).send({ error: "Email already registered" });
+
+        next();
+    } catch (err) {
+        res.status(500).send({ error: err });
+    }
+};
+
+export const validateToken = async (req, res, next) => {
+    const authorization = req.headers.authorization;
+    const token = authorization.split(" ")[1];
+
+    const { sessionId, error } = jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        return err ? { error: "Invalid token" } : decoded;
+    });
+
+    if (error) return res.status(401).send(error);
+
+    try {
+        const activeSession = await Session.findOne({ _id: sessionId });
+        if (!activeSession) return res.status(401).send({ error: "No active session for token" });
 
         next();
     } catch (err) {
