@@ -62,7 +62,7 @@ export default function App() {
                                     <Route index element={<HomePage />}></Route>
                                     <Route path="signin" element={<SignInPage />}></Route>
                                     <Route path="signup" element={<SignUpPage />}></Route>
-                                    <Route path="category" element={<CategoryPage />}></Route>
+                                    <Route path=":categoryName" element={<CategoryPage />}></Route>
                                     <Route path="products" element={<ProductsPage />}>
                                         <Route path=":productId" element={<ProductPage />}></Route>
                                     </Route>

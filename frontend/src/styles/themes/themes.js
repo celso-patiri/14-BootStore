@@ -7,13 +7,13 @@ export const lightTheme = {
     overMain: '#fff', // branco em cima do verde
     hoverMain: '#197867',
 
-    secondary: '#B0B0B0', // cor secundária
-    overSecondary: '#fff', //
+    secondary: '#606060', // cor secundária
+    overSecondary: '#000', //
     hoverSecondary: 'C0C0C0',
 
     special: '#DD4661', // cor do like, notificações
 
-    wright: '#268F7C',  // verde para correto
+    right: '#268F7C',  // verde para correto
     neutral: '#B0B0B0', // cinza para não preenchido
     wrong: '#C93333', // vermelho para errado
 
