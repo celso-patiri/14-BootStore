@@ -7,6 +7,7 @@ const cartSchema = new Schema({
         {
             productId: { type: Types.ObjectId, required: true, ref: "Product" },
             date: { type: Date, requried: true },
+            required: false,
         },
     ],
 });

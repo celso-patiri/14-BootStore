@@ -7,6 +7,7 @@ const wishlistSchema = new Schema({
         {
             productId: { type: Types.ObjectId, required: true, ref: "Product" },
             date: { type: Date, required: true },
+            required: false,
         },
     ],
     history: [
@@ -14,6 +15,7 @@ const wishlistSchema = new Schema({
             productId: { type: Types.ObjectId, required: true, ref: "Product" },
             date: { type: Date, required: true },
             bought: { type: Boolean, required: true },
+            required: false,
         },
     ],
 });
