@@ -6,7 +6,7 @@ const MONGO_URI = process.env.MONGO_URI; //mongodb://0.0.0.0:27017/store
 
 mongoose
     .connect(MONGO_URI)
-    .then(async () => {
+    .then(() => {
         console.log(`Connected with mongoose on ${MONGO_URI}`);
     })
     .catch(console.dir);
