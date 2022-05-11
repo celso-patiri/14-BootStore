@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    getAllProducts,
+    getProducts,
     getProductById,
     getAllCategories,
     getProductsByCategory,
@@ -8,7 +8,7 @@ import {
 
 const router = Router();
 
-router.get("/", getAllProducts);
+router.get("/", getProducts);
 router.get("/categories", getAllCategories);
 router.get("/:productId", getProductById);
 //tem que pensar como as categorias vao ser classificadas e validadas
