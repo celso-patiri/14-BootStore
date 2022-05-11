@@ -1,10 +1,8 @@
 //load products sample into database
 import mongoose from "mongoose";
-import productsFile from "../../products.json" assert { type: "json" };
+import products from "./products.js";
 import { Product } from "../models/product.model.js";
 const MONGO_URI = "mongodb://0.0.0.0:27017/store";
-
-const { products } = productsFile;
 
 mongoose
     .connect(MONGO_URI)
