@@ -8,6 +8,7 @@ import productsRouter from "./routes/products.router.js";
 import userRouter from "./routes/user.router.js";
 import cartRouter from "./routes/cart.router.js";
 import wishlistRouter from "./routes/wishlist.router.js";
+import ordersRouter from "./routes/orders.router.js";
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use("/products", productsRouter);
 app.use("/user", userRouter);
 app.use("/cart", cartRouter);
 app.use("/wishlist", wishlistRouter);
+app.use("/orders", ordersRouter);
 
 export default app;
