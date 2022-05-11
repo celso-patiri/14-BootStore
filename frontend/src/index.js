@@ -1,11 +1,21 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
+import * as React from "react";
+import ReactDOM from 'react-dom/client';
+import App from "./components/App";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+import "./styles/reset.css";
+import "./styles/styles.css";
+
+
+const appHeight = () => {
+    const body = document.querySelector("body");
+    body.style.setProperty('height', `${window.innerHeight}px`)
+}
+window.addEventListener('resize', appHeight)
+appHeight();
+
+
+const container = document.getElementById('root');
+const root = ReactDOM.createRoot(container);
 root.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>
+    <App />
 );
