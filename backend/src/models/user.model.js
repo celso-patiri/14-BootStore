@@ -19,8 +19,8 @@ userSchema.post("save", (user, next) => {
 
 // Delete associated Cart and Wishlist on User deletion
 userSchema.pre("deleteOne", { document: true }, function cleanup(next) {
-    Cart.deleteOne({ userId: this._id }, (err) => err && next(err));
-    Wishlist.deleteOne({ userId: this._id }, (err) => err && next(err));
+    Cart.deleteMany({ userId: this._id }, (err) => err && next(err));
+    Wishlist.deleteMany({ userId: this._id }, (err) => err && next(err));
     next();
 });
 
