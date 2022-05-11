@@ -19,8 +19,10 @@ describe("auth routes tests", () => {
     });
 
     afterAll(async () => {
-        await User.deleteOne({ email: "test@test.com" });
-        await User.deleteOne({ email: "test2@test.com" });
+        const user1 = await User.findOne({ email: "test@test.com" });
+        await user1.deleteOne();
+        const user2 = await User.findOne({ email: "test2@test.com" });
+        await user2.deleteOne();
         await mongoose.connection.close();
     });
 

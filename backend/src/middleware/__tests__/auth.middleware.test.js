@@ -35,7 +35,8 @@ describe("Session controller tests", () => {
     });
 
     afterAll(async () => {
-        await User.deleteOne({ email: "test@test.com" });
+        const user = await User.findOne({ email: "test@test.com" });
+        await user.deleteOne();
         await mongoose.connection.close();
     });
 
