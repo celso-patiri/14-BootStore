@@ -20,10 +20,7 @@ describe("auth routes tests", () => {
 
     afterAll(async () => {
         await User.deleteOne({ email: "test@test.com" });
-<<<<<<< HEAD
-=======
         await User.deleteOne({ email: "test2@test.com" });
->>>>>>> 0675552 (tests: added signin/signup success cases tests)
         await mongoose.connection.close();
     });
 
