@@ -1,4 +1,4 @@
-[
+const categories = [
     {
         "category": "smartphones",
         "title": "Celulares",
@@ -95,3 +95,5 @@
         "thumbnail": "https://media.4rgos.it/i/Argos/0521-m0014-m007-m050-asym-m008-m022-habitat-lighting-8539250?maxW=1200&qlt=75&fmt.jpeg.interlaced=true"
     }
 ]
+
+export default categories;

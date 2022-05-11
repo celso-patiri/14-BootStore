@@ -1,18 +1,18 @@
-//load products sample into database
+//load categories sample into database
 import mongoose from "mongoose";
-import products from "./products.js";
-import { Product } from "../../models/product.model.js"
+import categories from "./categories.js";
+import { Category } from "../../models/category.model.js"
 const MONGO_URI = "mongodb://0.0.0.0:27017/store";
 
 mongoose
     .connect(MONGO_URI)
     .then(async () => {
-        await products.forEach(async (product) => {
+        await categories.forEach(async (category) => {
             // console.log(product);
-            const created = await Product.create(product);
+            const created = await Category.create(category);
             // console.log(created);
         });
-        const dbProducts = await Product.find({});
+        const dbData = await Category.find({});
         // console.log("-----------------------------");
         // console.log(dbProducts);
     })
