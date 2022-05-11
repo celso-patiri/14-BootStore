@@ -47,14 +47,14 @@ describe("Session controller tests", () => {
             };
         });
 
-        it("should return 422 if name is empty", async () => {
+        it("should return 422 if email is empty", async () => {
             const response = await validateSignInBody(req, res, next);
             expect(res.statusCode).toBe(422);
-            expect(response.error).toMatch(/\"name\" is not allowed to be empty/i);
+            expect(response.error).toMatch(/email is required/i);
         });
 
         it("should return 422 if password is empty", async () => {
-            req.body.name = "test";
+            req.body.email = "test@test.com";
             const response = await validateSignInBody(req, res, next);
             expect(res.statusCode).toBe(422);
             expect(response.error).toMatch(/\"password\" is not allowed to be empty/i);
