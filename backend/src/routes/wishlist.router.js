@@ -5,12 +5,12 @@ import {
     getWishlistByUserId,
     updateUserWishlist,
 } from "../controllers/wishlist.controller.js";
-import { validateToken, validateUserId } from "../middleware/auth.middleware.js";
+import { validateToken } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-router.get("/", validateToken, validateUserId, getWishlistByUserId);
-router.put("/", validateToken, validateUserId, updateUserWishlist);
-router.post("/addToCart", validateToken, validateUserId, clearUserWishlist, updateUserCart);
+router.get("/", validateToken, getWishlistByUserId);
+router.put("/", validateToken, updateUserWishlist);
+router.post("/addToCart", validateToken, clearUserWishlist, updateUserCart);
 
 export default router;

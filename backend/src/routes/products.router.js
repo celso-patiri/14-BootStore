@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { validateToken } from "../middleware/auth.middleware.js";
 import {
     getAllProducts,
     getProductById,
@@ -9,11 +8,11 @@ import {
 
 const router = Router();
 
-router.get("/", validateToken, getAllProducts);
-router.get("/categories", validateToken, getAllCategories);
-router.get("/:productId", validateToken, getProductById);
+router.get("/", getAllProducts);
+router.get("/categories", getAllCategories);
+router.get("/:productId", getProductById);
 
 //tem que pensar como as categorias vao ser classificadas e validadas
-router.get("/category/:category", validateToken, getProductsByCategory);
+router.get("/category/:category", getProductsByCategory);
 
 export default router;

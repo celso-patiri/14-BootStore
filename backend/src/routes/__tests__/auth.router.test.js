@@ -44,7 +44,6 @@ describe("auth routes tests", () => {
             .expect(201)
             .then((res) => {
                 const response = JSON.parse(res.text);
-                expect(response.userId).not.toBeFalsy();
                 expect(response.email).not.toBeFalsy();
                 expect(response.name).not.toBeFalsy();
                 expect(response.token).not.toBeFalsy();
@@ -58,7 +57,6 @@ describe("auth routes tests", () => {
             .expect(201)
             .then((res) => {
                 const response = JSON.parse(res.text);
-                expect(response.userId).not.toBeFalsy();
                 expect(response.email).not.toBeFalsy();
                 expect(response.name).not.toBeFalsy();
                 expect(response.token).not.toBeFalsy();

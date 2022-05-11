@@ -79,9 +79,13 @@ export const validateToken = async (req, res, next) => {
     const authorization = req.headers.authorization;
     const token = authorization.split(" ")[1];
 
-    const { sessionId, error } = jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        return err ? { error: "Invalid token" } : decoded;
-    });
+    const { sessionId, userId, error } = jwt.verify(
+        token,
+        process.env.JWT_SECRET,
+        (err, decoded) => {
+            return err ? { error: "Invalid token" } : decoded;
+        }
+    );
 
     if (error) return res.status(401).send(error);
 
@@ -89,12 +93,13 @@ export const validateToken = async (req, res, next) => {
         const activeSession = await Session.findOne({ _id: sessionId });
         if (!activeSession) return res.status(401).send({ error: "No active session for token" });
 
+        res.locals.userInfo = {
+            userId,
+            sessionId,
+        };
+
         next();
     } catch (err) {
         res.status(500).send({ error: err });
     }
-};
-
-export const validateUserId = (req, res, next) => {
-    //TODO
 };
