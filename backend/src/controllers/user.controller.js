@@ -11,7 +11,11 @@ export const createUser = async (req, res, next) => {
             password: bcrypt.hashSync(sanitizeHtml(password)),
         });
 
-        res.locals.userId = newUser._id;
+        res.locals.userInfo = {
+            userId: newUser._id,
+            name: newUser.name,
+            email: newUser.email,
+        };
 
         next();
     } catch (err) {

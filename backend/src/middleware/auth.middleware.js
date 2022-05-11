@@ -49,7 +49,11 @@ export const validateCredentials = async (req, res, next) => {
         if (!bcrypt.compareSync(password, user.password))
             return res.status(401).send({ error: "Wrong Password" });
 
-        res.locals.userId = user._id;
+        res.locals.userInfo = {
+            userId: user._id,
+            name: user.name,
+            email: user.email,
+        };
 
         next();
     } catch (err) {
