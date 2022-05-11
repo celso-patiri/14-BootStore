@@ -4,7 +4,7 @@ import {
     validateCredentials,
     validateEmailAvailable,
     validateSignInBody,
-    validateSignUpBody,
+    validateUserBody,
 } from "../middleware/auth.middleware.js";
 import { createSession } from "../controllers/session.controller.js";
 import { createUser } from "../controllers/user.controller.js";
@@ -12,6 +12,6 @@ import { createUser } from "../controllers/user.controller.js";
 const router = Router();
 
 router.post("/signin", validateSignInBody, validateCredentials, createSession);
-router.post("/signup", validateSignUpBody, validateEmailAvailable, createUser, createSession);
+router.post("/signup", validateUserBody, validateEmailAvailable, createUser, createSession);
 
 export default router;
