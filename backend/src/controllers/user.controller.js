@@ -8,7 +8,7 @@ export const createUser = async (req, res, next) => {
         const newUser = await User.create({
             name: sanitizeHtml(name),
             email: sanitizeHtml(email),
-            password: bcrypt.hashSync(sanitizeHtml(password)),
+            password: bcrypt.hashSync(sanitizeHtml(password), 10),
         });
 
         res.locals.userInfo = {
