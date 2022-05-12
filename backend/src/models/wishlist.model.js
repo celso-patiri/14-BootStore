@@ -14,7 +14,7 @@ const wishlistSchema = new Schema({
         {
             productId: { type: Types.ObjectId, required: true, ref: "Product" },
             date: { type: Date, required: true },
-            bought: { type: Boolean, required: true },
+            action: { type: String, required: true }, // 'add', 'delete', 'order'
             required: false,
         },
     ],
