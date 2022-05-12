@@ -29,7 +29,7 @@ export const getCartByUserId = async (_req, res) => {
         const sendData = await Promise.all(
             cart.products.map(async (product) => {
                 const { quantity, productId } = product;
-                const productData = await Product.find({ _id: productId });
+                const productData = await Product.findOne({ _id: productId });
 
                 return {
                     productId,
