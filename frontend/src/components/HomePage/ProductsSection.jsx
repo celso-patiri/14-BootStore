@@ -47,33 +47,7 @@ export default function CategoriesSection() {
     }, []);
 
     const thumbs = products.map((product, index) => {
-        let isLiked = false;
-        let isInCart = false;
-
-        if (likes) {
-            likes.products.forEach((item) => {
-                if (product._id.toString() === item.productId.toString()) {
-                    isLiked = true;
-                }
-            });
-        }
-        if (cart) {
-            cart.forEach((item) => {
-                if (product._id.toString() === item.productId.toString()) {
-                    isInCart = true;
-                }
-            });
-        }
-
-        return (
-            <ProductThumb
-                key={index}
-                product={product}
-                isLiked={isInCart}
-                isInCart={isInCart}
-                showCartButton={true}
-            ></ProductThumb>
-        );
+        return <ProductThumb key={index} product={product} showCartButton={true}></ProductThumb>;
     });
 
     return (
