@@ -39,7 +39,7 @@ export const getCartByUserId = async (_req, res) => {
             })
         );
 
-        res.status(201).send({ cart: sendData });
+        res.status(201).send(sendData);
     } catch (err) {
         console.log(err);
         res.status(500).send({ error: err });

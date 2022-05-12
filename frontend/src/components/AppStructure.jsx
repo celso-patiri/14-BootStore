@@ -11,18 +11,22 @@ const View = styled.div`
     display: flex;
     flex-direction: column;
     overflow-y: hidden;
+    align-items: center;
 `;
 
 const Page = styled.main`
     flex: 1 1 auto;
     width: 100%;
     overflow-y: auto;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
 `;
 
 const FooterNav = styled.nav`
     flex: 0 0 auto;
     width: 100%;
-    height: 100px;
+    max-width: 500px;
+    height: 70px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -33,8 +37,8 @@ const NavButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 70px;
-    height: 70px;
+    width: 54px;
+    height: 54px;
     border-radius: 100%;
 
     background-color: ${({ selected, theme }) => {
@@ -50,8 +54,8 @@ const NavButton = styled.div`
         color: ${({ selected, theme }) => {
             return selected ? theme.overMain : theme.secondary;
         }};
-        font-size: 32px;
-        --ionicon-stroke-width: 40px;
+        font-size: 26px;
+        --ionicon-stroke-width: ${({ selected }) => (selected ? "0px" : "40px")};
     }
 
     position: relative;

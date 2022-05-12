@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "styled-components";
+import axios from "axios";
 
 import ConfigContext from "../contexts/ConfigContext";
 import AppContext from "../contexts/AppContext";
@@ -22,9 +22,9 @@ import OrdersPage from "./OrdersPage/OrdersPage.jsx";
 import OrderPage from "./OrderPage/OrderPage.jsx";
 import { useState } from "react";
 import Theme from "../styles/themes/Theme";
+import { useEffect } from "react";
 
 export default function App() {
-    // Config Data
     const apiLink = "http://localhost:5000";
 
     // App Context
@@ -34,9 +34,65 @@ export default function App() {
     // User Data
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
-    const [cart, setCart] = useState([]);
-    const [likes, setLikes] = useState([]);
-    const [orders, setOrders] = useState([]);
+    const [cart, setCart] = useState(null);
+    const [likes, setLikes] = useState(null);
+    const [orders, setOrders] = useState(null);
+
+    useEffect(() => {
+        if (!token) {
+            const download = JSON.parse(localStorage.getItem("bootstore_token"));
+            if (download) {
+                setToken(download);
+            }
+        }
+        if (token) {
+            if (!user) {
+                getData("/user", setUser);
+            }
+            if (!cart) {
+                getData("/cart", setCart);
+            }
+            if (!likes) {
+                getData("/wishlist", setLikes);
+            }
+        } else {
+            setUser(null);
+            setCart(null);
+            setLikes(null);
+        }
+    }, [token, user]);
+
+    async function getData(url, setFunction) {
+        console.log(apiLink + url);
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+        try {
+            const promise = await axios.get(apiLink + url, config);
+            console.log("get " + url, promise.data);
+            await setFunction(promise.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function postData(url, body) {
+        console.log(apiLink + url);
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+        try {
+            const promise = await axios.post(apiLink + url, body, config);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function putData(url, body) {
+        console.log(`trying to put at ${apiLink + url}`, body);
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+        try {
+            const promise = await axios.put(apiLink + url, body, config);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <ConfigContext.Provider value={{ apiLink }}>
@@ -53,6 +109,9 @@ export default function App() {
                         setLikes,
                         orders,
                         setOrders,
+                        getData,
+                        postData,
+                        putData,
                     }}
                 >
                     <Theme>
@@ -62,7 +121,10 @@ export default function App() {
                                     <Route index element={<HomePage />}></Route>
                                     <Route path="signin" element={<SignInPage />}></Route>
                                     <Route path="signup" element={<SignUpPage />}></Route>
-                                    <Route path=":categoryName" element={<CategoryPage />}></Route>
+                                    <Route
+                                        path="/categories/:categoryName"
+                                        element={<CategoryPage />}
+                                    />
                                     <Route path="products" element={<ProductsPage />}>
                                         <Route path=":productId" element={<ProductPage />}></Route>
                                     </Route>

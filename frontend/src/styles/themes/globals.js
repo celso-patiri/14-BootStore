@@ -12,7 +12,7 @@ export default createGlobalStyle`
         margin: 0;    
         padding: 0;    
         font-family: sans-serif;    
-        transition: all 0.25s linear;
+        transition: all 0.1s linear;
 
         a {
             color: ${({ theme }) => theme.linkText};

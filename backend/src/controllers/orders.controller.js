@@ -7,7 +7,7 @@ export const getOrdersFromUser = async (req, res) => {
     console.log(userId);
     try {
         const orders = await Order.find({ userId });
-        res.status(201).send({ orders: orders });
+        res.status(201).send(orders);
     } catch (err) {
         res.status(500).send({ error: err });
     }
