@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "styled-components";
+import axios from "axios";
 
 import ConfigContext from "../contexts/ConfigContext";
 import AppContext from "../contexts/AppContext";
@@ -22,10 +22,10 @@ import OrdersPage from "./OrdersPage/OrdersPage.jsx";
 import OrderPage from "./OrderPage/OrderPage.jsx";
 import { useState } from "react";
 import Theme from "../styles/themes/Theme";
+import { useEffect } from "react";
 
 export default function App() {
-    // Config Data
-    const apiLink = "";
+    const apiLink = "http://localhost:5000/";
 
     // App Context
     const [theme, setTheme] = useState("light"); // 'light', 'dark'
@@ -37,6 +37,37 @@ export default function App() {
     const [cart, setCart] = useState([]);
     const [likes, setLikes] = useState([]);
     const [orders, setOrders] = useState([]);
+
+    useEffect(() => {
+        if (!token) {
+            const download = JSON.parse(localStorage.getItem("bootstore_token"));
+            if (download) {
+                setToken(download);
+            }
+        }
+        if (token) {
+            if (!user) {
+                await getData("user", setUser);
+            }
+            if (!user) {
+                await getData("cart", setCart);
+            }
+            if (!user) {
+                await getData("wishlist", setLikes);
+            }
+        }
+    }, []);
+
+    async function getData(url, setFunction) {
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+        try {
+            const promise = await axios.get(apiLink + url, config);
+            console.log("downloaded", promise.data);
+            await setFunction(promise.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <ConfigContext.Provider value={{ apiLink }}>
