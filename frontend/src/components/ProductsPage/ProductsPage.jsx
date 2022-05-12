@@ -91,7 +91,7 @@ export default function ProductsPage() {
     const thumbs = products ? (
         products.map((product, index) => {
             return (
-                <ProductThumb key={index} product={product} showCartButton={true}></ProductThumb>
+                <ProductThumb key={index} product={product} showCartButton={false}></ProductThumb>
             );
         })
     ) : (

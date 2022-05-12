@@ -164,8 +164,8 @@ export default function ProductPage() {
         }
 
         if (product && likes) {
-            const likeProduct = likes.products.find((p) => {
-                return p.productId === product._id;
+            const likeProduct = likes.find((p) => {
+                return p._id === product._id;
             });
             if (likeProduct) {
                 setIsLiked(true);
@@ -243,8 +243,12 @@ export default function ProductPage() {
                 </TextsTop>
                 <Description>{product.description}</Description>
             </Texts>
-            <Button>
-                {token ? (isInCart ? "Ver carrinho!" : "Adicionar ao carrinho") : "Fazer login"}
+            <Button onClick={cartButtonPressed}>
+                {token
+                    ? isInCart
+                        ? `Você já pegou esse item. Ver carrinho!`
+                        : "Adicionar ao carrinho"
+                    : "Fazer login"}
             </Button>
         </>
     ) : (
@@ -262,7 +266,7 @@ export default function ProductPage() {
                 </LikeButton>
             </Header>
             <ImageArea>{Image}</ImageArea>
-            <Bottom onClick={cartButtonPressed}>{bottom}</Bottom>
+            <Bottom>{bottom}</Bottom>
         </Wrapper>
     );
 }

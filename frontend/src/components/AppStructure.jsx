@@ -86,7 +86,7 @@ export default function AppStructure() {
     useEffect(() => {
         setIsLogged(token ? true : false);
         if (likes) {
-            setHasProductsInCart(likes.products.length > 0);
+            setHasProductsInCart(likes.length > 0);
         }
         if (cart) {
             setHasProductsInCart(cart.length > 0);

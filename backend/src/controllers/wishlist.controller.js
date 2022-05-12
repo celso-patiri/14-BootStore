@@ -29,7 +29,7 @@ export const getWishlistByUserId = async (req, res) => {
             return item.productId;
         })
         const products = await Product.find().where('_id').in(productIds).exec();
-        res.status(201).send(wishlist);
+        res.status(201).send(products);
     } catch (err) {
         res.status(500).send({ error: err });
     }
