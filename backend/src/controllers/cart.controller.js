@@ -23,9 +23,28 @@ export const getCartByUserId = async (req, res) => {
     const { userId } = res.locals.userInfo;
     try {
         const cart = await Cart.findOne({ userId });
-        let allProducts = cart.products;
-        let products = allProducts.filter(product => product.quantity > 0);
-        res.status(201).send({ cart: products });
+        const cartProductsData = cart.products
+        const productIds = cartProductsData.map(item => {
+            return item.productId;
+        })
+        const products = await Product.find().where('_id').in(productIds).exec();
+
+        const sendData = cartProductsData.map(product => {
+            const { quantity, productId } = product
+            let price, title, thumbnail;
+
+            products.forEach(p => {
+                if (p._id.toString() === product.productId.toString()) {
+                    price = p.price;
+                    thumbnail = p.thumbnail;
+                    title = p.title;
+                }
+            })
+
+            return { quantity, productId, price, title, thumbnail };
+        })
+
+        res.status(201).send({ cart: sendData });
     } catch (err) {
         res.status(500).send({ error: err });
     }

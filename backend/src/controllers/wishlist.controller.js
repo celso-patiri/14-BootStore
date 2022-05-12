@@ -25,7 +25,11 @@ export const getWishlistByUserId = async (req, res) => {
     const { userId } = res.locals.userInfo;
     try {
         const wishlist = await Wishlist.findOne({ userId });
-        res.status(201).send({ wishlist: wishlist.products });
+        const productIds = wishlist.products.map(item => {
+            return item.productId;
+        })
+        const products = await Product.find().where('_id').in(productIds).exec();
+        res.status(201).send({ wishlist: products });
     } catch (err) {
         res.status(500).send({ error: err });
     }
