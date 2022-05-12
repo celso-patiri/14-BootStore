@@ -25,7 +25,7 @@ import Theme from "../styles/themes/Theme";
 import { useEffect } from "react";
 
 export default function App() {
-    const apiLink = "http://localhost:5000/";
+    const apiLink = "http://localhost:5000";
 
     // App Context
     const [theme, setTheme] = useState("light"); // 'light', 'dark'
