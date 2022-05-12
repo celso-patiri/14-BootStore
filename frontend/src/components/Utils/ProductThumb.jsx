@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContext";
@@ -111,17 +111,42 @@ const CartButton = styled.div`
     }
 `;
 
-export default function ProductThumb(props) {
-    const { setCart, setLikes, getData, putData } = useContext(UserContext);
+export default function ProductThumb({ product, showCartButton }) {
+    const { setCart, setLikes, getData, putData, cart, likes, token } = useContext(UserContext);
 
-    const { product, showCartButton } = props;
-    const [isLiked, setIsLiked] = useState(props.isLiked);
-    const [isInCart, setIsInCart] = useState(props.isInCart);
+    const [isLiked, setIsLiked] = useState(false);
+    const [isInCart, setIsInCart] = useState(false);
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (likes) {
+            const likeProduct = likes.products.find((p) => {
+                return p.productId === product._id;
+            });
+            if (likeProduct) {
+                setIsLiked(true);
+            } else {
+                setIsLiked(false);
+            }
+        }
+        if (cart) {
+            const cartProduct = cart.find((p) => {
+                return p.productId === product._id;
+            });
+            if (cartProduct) {
+                setIsInCart(true);
+            } else {
+                setIsInCart(false);
+            }
+        }
+    }, [cart, likes, token]);
+
     async function likeButtonPressed(event) {
         event.stopPropagation();
+        if (!token) {
+            navigate("/signin");
+        }
         try {
             await putData("/wishlist", {
                 productId: product._id,
@@ -136,6 +161,9 @@ export default function ProductThumb(props) {
 
     async function cartButtonPressed(event) {
         event.stopPropagation();
+        if (!token) {
+            navigate("/signin");
+        }
         try {
             await putData("/cart", {
                 productId: product._id,

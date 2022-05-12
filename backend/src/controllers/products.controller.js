@@ -36,7 +36,7 @@ export const getProductsByCategory = async (req, res) => {
 export const getProductById = async (req, res) => {
     const productId = req.params.productId;
     try {
-        const product = await Product.find({ _id: productId });
+        const product = await Product.findOne({ _id: productId });
         res.status(200).send(product);
     } catch (err) {
         res.status(500).send({ error: err });
