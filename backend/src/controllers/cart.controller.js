@@ -1,11 +1,11 @@
 import { Cart } from "../models/cart.model.js";
+import { Wishlist } from "../models/wishlist.model.js";
 import dayjs from "dayjs";
 import { Product } from "../models/product.model.js";
 
 // middleware
 export const validateCartBody = async (req, res, next) => {
     let { productId, quantity } = req.body;
-    console.log(quantity);
     if (quantity < 0) { return res.status(401).send({ error: "Quantity must be 0 or greater" }) }
     try {
         const product = await Product.findOne({ _id: productId });
@@ -31,7 +31,6 @@ export const getCartByUserId = async (req, res) => {
     }
 };
 
-
 export const updateUserCart = async (req, res) => {
     const { userId } = res.locals.userInfo;
     const { productId, quantity } = req.body;
@@ -45,21 +44,55 @@ export const updateUserCart = async (req, res) => {
         })
         let newProduct = { productId, quantity };
 
-        if (productIndex < 0) {
+        if (productIndex < 0 && quantity > 0) {
             products.push(newProduct)
         }
         else {
-            products[productIndex] = newProduct;
+            if (quantity > 0) { products[productIndex] = newProduct; }
+            else { products.splice(productIndex, 1); }
         }
         await Cart.updateOne({ userId }, { $set: { "products": products } })
+        return res.sendStatus(200);
+    } catch (err) {
+        return res.status(500).send({ error: err });
+    }
+};
+
+
+export const addWishlistToCart = async (req, res) => {
+    const { userId } = res.locals.userInfo;
+    try {
+        const cart = await Cart.findOne({ userId });
+        const cartProducts = cart.products;
+        const wishlist = await Wishlist.findOne({ userId });
+        const wishlistProducts = wishlist.products;
+        wishlistProducts.forEach(wsProduct => {
+            let notInCart = true;
+            cartProducts.forEach(cProdut => {
+                if (wsProduct.productId.toString() === cProdut.productId.toString()) { notInCart = false }
+            })
+            if (notInCart) {
+                cartProducts.push({ productId: wsProduct.productId, quantity: 1 })
+            }
+        })
+
+        await Cart.updateOne({ userId }, { $set: { "products": cartProducts } })
         res.sendStatus(200);
     } catch (err) {
         res.status(500).send({ error: err });
     }
-};
+}
 
-// TODO
+
 export const clearUserCart = async (req, res, next) => {
-    //TODO
-    //const {userId, sessionId} = res.locals.userInfo
+    const { userId } = res.locals.userInfo;
+    try {
+        const cart = await Cart.findOne({ userId });
+        const products = cart.products;
+        res.locals.orderProducts = products;
+        await Cart.updateOne({ userId }, { $set: { "products": [] } })
+    } catch (err) {
+        res.status(500).send({ error: err });
+    }
+    next();
 };

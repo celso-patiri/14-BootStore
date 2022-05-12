@@ -76,6 +76,7 @@ export const validateEmailAvailable = async (req, res, next) => {
 };
 
 export const validateToken = async (req, res, next) => {
+
     const authorization = req.headers.authorization;
     const token = authorization.split(" ")[1];
 

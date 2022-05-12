@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { updateUserCart } from "../controllers/cart.controller.js";
+import { addWishlistToCart } from "../controllers/cart.controller.js";
 import {
     validateWishlistBody,
     getWishlistByUserId,
@@ -11,6 +11,6 @@ const router = Router();
 
 router.put("/", validateToken, validateWishlistBody, updateUserWishlist); // OK
 router.get("/", validateToken, getWishlistByUserId); // OK
-router.post("/addToCart", validateToken, updateUserCart);
+router.post("/addToCart", validateToken, addWishlistToCart);
 
 export default router;

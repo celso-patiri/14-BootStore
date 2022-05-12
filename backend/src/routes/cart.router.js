@@ -4,7 +4,7 @@ import { getCartByUserId, updateUserCart, validateCartBody } from "../controller
 
 const router = Router();
 
-router.get("/", validateToken, getCartByUserId);
-router.put("/", validateToken, validateCartBody, updateUserCart);
+router.get("/", validateToken, getCartByUserId); // OK
+router.put("/", validateToken, validateCartBody, updateUserCart); // OK
 
 export default router;

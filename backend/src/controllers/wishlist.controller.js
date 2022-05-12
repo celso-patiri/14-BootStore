@@ -70,8 +70,32 @@ export const updateUserWishlist = async (req, res) => {
     }
 };
 
-// TODO
-export const clearUserWishlist = (req, res, next) => {
-    //todo: remove
-    //const {userId, sessionId} = res.locals.userInfo
+export const clearUserWishlist = async (req, res, next) => {
+    const { userId } = res.locals.userInfo;
+    const { orderProducts } = res.locals;
+    const date = dayjs();
+    try {
+        const wishlist = await Wishlist.findOne({ userId });
+        let { products, history } = wishlist;
+        orderProducts.forEach(orderProduct => {
+            let removeAtIndex = -1;
+            products.forEach((wlProduct, index) => {
+                if (orderProduct.productId.toString() === wlProduct.productId.toString()) {
+                    history.push({
+                        productId: orderProduct.productId,
+                        action: 'order',
+                        date
+                    })
+                    removeAtIndex = index;
+                }
+            })
+            if (removeAtIndex > -1) { products.splice(removeAtIndex, 1) };
+        })
+        await Wishlist.updateOne({ userId }, { $set: { "products": products, "history": history } })
+    }
+    catch (err) {
+        return res.status(500).send({ error: err });
+    }
+
+    next();
 };
