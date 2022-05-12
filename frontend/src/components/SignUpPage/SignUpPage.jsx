@@ -8,6 +8,7 @@ import ErrorMessage from "../AuthPage/ErrorMessage.jsx";
 import Main from "../AuthPage/MainContainer.jsx";
 import Form from "../AuthPage/StyledForm.jsx";
 import Button from "../AuthPage/SubmitButton.jsx";
+import Title from "../AuthPage/Title.jsx";
 import Input from "../AuthPage/TextInput.jsx";
 
 export default function SignUpPage() {
@@ -54,7 +55,7 @@ export default function SignUpPage() {
 
     return (
         <Main>
-            <h1>TheBestStore</h1>
+            <Title>TheBestStore</Title>
             <Form>
                 <Input
                     type="text"
