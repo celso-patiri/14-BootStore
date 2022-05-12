@@ -9,7 +9,7 @@ const Button = styled.button`
     font-weight: 700;
     font-size: 1rem;
     width: 60%;
-    height: 3rem;
+    height: 2.5rem;
 `;
 
 export default Button;
