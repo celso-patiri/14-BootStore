@@ -24,7 +24,7 @@ export const getCartByUserId = async (_req, res) => {
     const { userId } = res.locals.userInfo;
     try {
         const cart = await Cart.findOne({ userId });
-        if (!cart) throw { error: "No cart for this userId" };
+        if (!cart) throw "No cart for this userId";
 
         const sendData = await Promise.all(
             cart.products.map(async (product) => {
