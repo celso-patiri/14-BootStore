@@ -36,13 +36,13 @@ const Hello = styled.h1`
 `;
 
 export default function HomePage() {
-    const { token, user, setUser, likes, setLikes, cart, setCarts } = useContext(UserContext);
-    const { apiLink } = useContext(ConfigContext);
+    const { user } = useContext(UserContext);
+    const hello = `Bem vindo${user ? `, ${user.name}` : ""}!`;
 
     return (
         <Wrapper>
             <Main>
-                <Hello>Bem vindo, Estevam</Hello>
+                <Hello>{hello}</Hello>
                 <CategoriesSection />
                 <ProductsSection />
             </Main>

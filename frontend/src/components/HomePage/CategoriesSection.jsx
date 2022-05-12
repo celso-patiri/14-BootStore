@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
+import UserContext from "../../contexts/UserContext";
 import styled from "styled-components";
 
 import CategoryThumb from "./CategoryThumb";
@@ -31,27 +32,16 @@ const Categories = styled.div`
     }
 `;
 
-// apagar
-const categories = [
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-];
-
 export default function CategoriesSection() {
-    const thumbs = categories.map((category) => {
-        return <CategoryThumb></CategoryThumb>;
+    const { getData } = useContext(UserContext);
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        getData("/products/categories", setCategories);
+    }, []);
+
+    const thumbs = categories.map((category, index) => {
+        return <CategoryThumb category={category} key={index}></CategoryThumb>;
     });
 
     return (

@@ -34,9 +34,9 @@ export default function App() {
     // User Data
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
-    const [cart, setCart] = useState([]);
-    const [likes, setLikes] = useState([]);
-    const [orders, setOrders] = useState([]);
+    const [cart, setCart] = useState(null);
+    const [likes, setLikes] = useState(null);
+    const [orders, setOrders] = useState(null);
 
     useEffect(() => {
         if (!token) {
@@ -47,23 +47,48 @@ export default function App() {
         }
         if (token) {
             if (!user) {
-                await getData("user", setUser);
+                getData("/user", setUser);
             }
-            if (!user) {
-                await getData("cart", setCart);
+            if (!cart) {
+                getData("/cart", setCart);
             }
-            if (!user) {
-                await getData("wishlist", setLikes);
+            if (!likes) {
+                getData("/wishlist", setLikes);
             }
+        } else {
+            setUser(null);
+            setCart(null);
+            setLikes(null);
         }
-    }, []);
+    }, [token, user]);
 
     async function getData(url, setFunction) {
+        console.log(apiLink + url);
         const config = { headers: { Authorization: `Bearer ${token}` } };
         try {
             const promise = await axios.get(apiLink + url, config);
-            console.log("downloaded", promise.data);
+            console.log("get " + url, promise.data);
             await setFunction(promise.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function postData(url, body) {
+        console.log(apiLink + url);
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+        try {
+            const promise = await axios.post(apiLink + url, body, config);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function putData(url, body) {
+        console.log(`trying to put at ${apiLink + url}`, body);
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+        try {
+            const promise = await axios.put(apiLink + url, body, config);
         } catch (err) {
             console.log(err);
         }
@@ -84,6 +109,9 @@ export default function App() {
                         setLikes,
                         orders,
                         setOrders,
+                        getData,
+                        postData,
+                        putData,
                     }}
                 >
                     <Theme>
@@ -93,7 +121,10 @@ export default function App() {
                                     <Route index element={<HomePage />}></Route>
                                     <Route path="signin" element={<SignInPage />}></Route>
                                     <Route path="signup" element={<SignUpPage />}></Route>
-                                    <Route path=":categoryName" element={<CategoryPage />}></Route>
+                                    <Route
+                                        path="/categories/:categoryName"
+                                        element={<CategoryPage />}
+                                    />
                                     <Route path="products" element={<ProductsPage />}>
                                         <Route path=":productId" element={<ProductPage />}></Route>
                                     </Route>

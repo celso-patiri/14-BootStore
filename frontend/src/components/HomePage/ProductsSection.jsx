@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ProductThumb from "../Utils/ProductThumb";
+import { useContext, useEffect, useState } from "react";
+import UserContext from "../../contexts/UserContext";
 
 const Wrapper = styled.div`
     display: flex;
@@ -36,27 +38,42 @@ const Products = styled.div`
     padding: 0px 25px;
 `;
 
-// apagar
-const products = [
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-    "smart",
-    "teste",
-];
-
 export default function CategoriesSection() {
-    const thumbs = products.map((category) => {
-        return <ProductThumb></ProductThumb>;
+    const { likes, cart, getData } = useContext(UserContext);
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        getData("/products/", setProducts);
+    }, []);
+
+    const thumbs = products.map((product, index) => {
+        let isLiked = false;
+        let isInCart = false;
+
+        if (likes) {
+            likes.products.forEach((item) => {
+                if (product._id.toString() === item.productId.toString()) {
+                    isLiked = true;
+                }
+            });
+        }
+        if (cart) {
+            cart.forEach((item) => {
+                if (product._id.toString() === item.productId.toString()) {
+                    isInCart = true;
+                }
+            });
+        }
+
+        return (
+            <ProductThumb
+                key={index}
+                product={product}
+                isLiked={isInCart}
+                isInCart={isInCart}
+                showCartButton={true}
+            ></ProductThumb>
+        );
     });
 
     return (

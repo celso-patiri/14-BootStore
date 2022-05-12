@@ -48,6 +48,7 @@ export default function SignUpPage() {
                 const { name, email, token } = data;
                 setUser({ name, email });
                 setToken({ token });
+                localStorage.setItem("bootstore_token", JSON.stringify(token));
             })
             .catch(console.error);
     };

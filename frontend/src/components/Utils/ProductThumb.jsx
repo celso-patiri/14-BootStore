@@ -1,25 +1,48 @@
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import UserContext from "../../contexts/UserContext";
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     padding: 0;
     gap: 10px;
+    width: 140px;
+    cursor: pointer;
 `;
 
 const Main = styled.div`
     height: 160px;
-    width: 140px;
+    width: 100%;
     border-radius: 20px;
     background-color: #e2e2e2;
     position: relative;
-    cursor: pointer;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        transition: all 0.2s linear;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        :hover {
+            width: 110%;
+            height: 110%;
+        }
+    }
 `;
 
 const Bottom = styled.div`
     display: flex;
     flex-direction: column;
     padding: 0;
+    gap: 5px;
+    width: 100%;
 `;
 
 const Text = styled.div`
@@ -34,6 +57,7 @@ const Buttons = styled.div`
     position: absolute;
     right: 10px;
     top: 10px;
+    z-index: 20;
 `;
 
 const LikeButton = styled.div`
@@ -48,7 +72,7 @@ const LikeButton = styled.div`
 
     ion-icon {
         font-size: 16px;
-        --ionicon-stroke-width: ${({ selected }) => (selected ? "0px" : "40px")};
+        --ionicon-stroke-width: ${({ selected }) => (selected ? "0px" : "50px")};
         color: ${({ selected, theme }) => {
             return selected ? theme.special : theme.secondary;
         }};
@@ -87,25 +111,67 @@ const CartButton = styled.div`
     }
 `;
 
-export default function ProductThumb() {
-    const isLiked = true;
-    const isInCart = false;
+export default function ProductThumb(props) {
+    const { setCart, setLikes, getData, putData } = useContext(UserContext);
+
+    const { product, showCartButton } = props;
+    const [isLiked, setIsLiked] = useState(props.isLiked);
+    const [isInCart, setIsInCart] = useState(props.isInCart);
+
+    const navigate = useNavigate();
+
+    async function likeButtonPressed(event) {
+        event.stopPropagation();
+        try {
+            await putData("/wishlist", {
+                productId: product._id,
+                action: isLiked ? "delete" : "add",
+            });
+            setIsLiked(!isLiked);
+            await getData("/wishlist", setLikes);
+        } catch (err) {
+            return console.log(err.error);
+        }
+    }
+
+    async function cartButtonPressed(event) {
+        event.stopPropagation();
+        try {
+            await putData("/cart", {
+                productId: product._id,
+                quantity: isInCart ? "0" : "1",
+            });
+            setIsInCart(!isInCart);
+            await getData("/cart", setCart);
+        } catch (err) {
+            return console.log(err.error);
+        }
+    }
 
     return (
         <Wrapper>
-            <Main>
+            <Main
+                onClick={(e) => {
+                    navigate(`/products/${product._id}`);
+                }}
+            >
+                <img src={product.thumbnail}></img>
                 <Buttons>
-                    <LikeButton selected={isLiked}>
+                    <LikeButton selected={isLiked} onClick={likeButtonPressed}>
                         <ion-icon name={`heart${isLiked ? "" : "-outline"}`}></ion-icon>
                     </LikeButton>
-                    <CartButton selected={isInCart}>
-                        <ion-icon name={`cart${isInCart ? "" : "-outline"}`}></ion-icon>
-                    </CartButton>
+                    {showCartButton ? (
+                        <CartButton selected={isInCart} onClick={cartButtonPressed}>
+                            <ion-icon name={`cart${isInCart ? "" : "-outline"}`}></ion-icon>
+                        </CartButton>
+                    ) : (
+                        <></>
+                    )}
                 </Buttons>
             </Main>
             <Bottom>
-                <Text>Title</Text>
-                <Text>Price</Text>
+                <Text>{product.title}</Text>
+                <Text>{`$ ${product.price}`}</Text>
             </Bottom>
         </Wrapper>
     );
