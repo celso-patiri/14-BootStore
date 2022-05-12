@@ -26,19 +26,22 @@ export const getCartByUserId = async (_req, res) => {
         const cart = await Cart.findOne({ userId });
         if (!cart) throw { error: "No cart for this userId" };
 
-        const sendData = cart.products.map(async (product) => {
-            const { quantity, productId } = product;
-            const productData = await Product.find({ _id: productId });
+        const sendData = await Promise.all(
+            cart.products.map(async (product) => {
+                const { quantity, productId } = product;
+                const productData = await Product.find({ _id: productId });
 
-            return {
-                productId,
-                quantity,
-                productData,
-            };
-        });
+                return {
+                    productId,
+                    quantity,
+                    productData,
+                };
+            })
+        );
 
         res.status(201).send({ cart: sendData });
     } catch (err) {
+        console.log(err);
         res.status(500).send({ error: err });
     }
 };
