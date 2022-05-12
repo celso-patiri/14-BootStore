@@ -25,7 +25,7 @@ import Theme from "../styles/themes/Theme";
 
 export default function App() {
     // Config Data
-    const apiLink = "";
+    const apiLink = "http://localhost:5000";
 
     // App Context
     const [theme, setTheme] = useState("light"); // 'light', 'dark'
