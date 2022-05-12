@@ -82,8 +82,10 @@ export const addWishlistToCart = async (req, res) => {
     try {
         const cart = await Cart.findOne({ userId });
         const cartProducts = cart.products;
+
         const wishlist = await Wishlist.findOne({ userId });
         const wishlistProducts = wishlist.products;
+
         wishlistProducts.forEach((wsProduct) => {
             let notInCart = true;
             cartProducts.forEach((cProdut) => {

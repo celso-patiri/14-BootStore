@@ -38,30 +38,29 @@ export const postUserOrder = async (req, res) => {
     let totalAmmount = 0.0;
 
     try {
-        const productIds = orderProducts.map(item => {
-            return item.productId;
-        })
-        const productsFromDb = await Product.find().where('_id').in(productIds).exec();
 
-        const products = productsFromDb.map(product => {
-            const { _id, title, price, thumbnail } = product;
-            let quantity = 1;
-            orderProducts.forEach(p => {
-                if (p.productId.toString() === product._id.toString()) {
-                    quantity = p.quantity
-                }
+        const products = await Promise.all(
+            orderProducts.map(async (product) => {
+                const { quantity, productId } = product;
+                const productData = await Product.findOne({ _id: productId });
+                cartAmmount += quantity * productData.price;
+                return {
+                    productId,
+                    quantity,
+                    price: productData.price,
+                    title: productData.title,
+                    thumbnail: productData.thumbnail
+                };
             })
-            cartAmmount += quantity * price;
-            return { productId: _id, title, price, thumbnail, quantity };
-        })
+        );
 
         totalAmmount = cartAmmount + shippingAmmount;
-
         Order.create({
             userId, date, address,
             cartAmmount, shippingAmmount, totalAmmount,
             products
         });
+
         res.sendStatus(200);
     } catch (err) {
         res.status(500).send({ error: err });
