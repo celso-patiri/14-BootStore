@@ -1,9 +1,10 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 import AppContext from "../contexts/AppContext";
+import UserContext from "../contexts/UserContext";
 
 const View = styled.div`
     width: 100%;
@@ -74,8 +75,23 @@ const Notification = styled.div`
 
 export default function AppStructure() {
     const { selectedNavTab, setSelectedNavTab } = useContext(AppContext);
+    const { token, cart, likes } = useContext(UserContext);
+
+    const [isLogged, setIsLogged] = useState(false);
+    const [hasLikedProducts, setHasLikedProducts] = useState(false);
+    const [hasProductsInCart, setHasProductsInCart] = useState(false);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setIsLogged(token ? true : false);
+        if (likes) {
+            setHasProductsInCart(likes.products.length > 0);
+        }
+        if (cart) {
+            setHasProductsInCart(cart.length > 0);
+        }
+    }, [token, likes, cart]);
 
     function goTo(path, tab) {
         setSelectedNavTab(tab);
@@ -98,31 +114,38 @@ export default function AppStructure() {
                         name={`planet${selectedNavTab === "explore" ? "" : "-outline"}`}
                     ></ion-icon>
                 </NavButton>
+
                 <NavButton
                     selected={selectedNavTab === "likes"}
                     onClick={() => {
-                        goTo("/likes", "likes");
+                        isLogged ? goTo("/likes", "likes") : goTo("/signin", "user");
                     }}
                 >
                     <ion-icon
                         name={`heart${selectedNavTab === "likes" ? "" : "-outline"}`}
                     ></ion-icon>
                 </NavButton>
+
                 <NavButton
                     selected={selectedNavTab === "cart"}
                     onClick={() => {
-                        goTo("/cart", "cart");
+                        isLogged ? goTo("/cart", "cart") : goTo("/signin", "user");
                     }}
                 >
-                    {selectedNavTab === "cart" ? <></> : <Notification></Notification>}
+                    {selectedNavTab !== "cart" && hasProductsInCart ? (
+                        <Notification></Notification>
+                    ) : (
+                        <></>
+                    )}
                     <ion-icon
                         name={`cart${selectedNavTab === "cart" ? "" : "-outline"}`}
                     ></ion-icon>
                 </NavButton>
+
                 <NavButton
                     selected={selectedNavTab === "user"}
                     onClick={() => {
-                        goTo("/user", "user");
+                        isLogged ? goTo("/user", "user") : goTo("/signin", "user");
                     }}
                 >
                     <ion-icon

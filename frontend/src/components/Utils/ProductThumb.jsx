@@ -112,7 +112,7 @@ const CartButton = styled.div`
 `;
 
 export default function ProductThumb({ product, showCartButton }) {
-    const { setCart, setLikes, getData, putData, cart, likes } = useContext(UserContext);
+    const { setCart, setLikes, getData, putData, cart, likes, token } = useContext(UserContext);
 
     const [isLiked, setIsLiked] = useState(false);
     const [isInCart, setIsInCart] = useState(false);
@@ -140,10 +140,13 @@ export default function ProductThumb({ product, showCartButton }) {
                 setIsInCart(false);
             }
         }
-    }, [cart, likes]);
+    }, [cart, likes, token]);
 
     async function likeButtonPressed(event) {
         event.stopPropagation();
+        if (!token) {
+            navigate("/signin");
+        }
         try {
             await putData("/wishlist", {
                 productId: product._id,
@@ -158,6 +161,9 @@ export default function ProductThumb({ product, showCartButton }) {
 
     async function cartButtonPressed(event) {
         event.stopPropagation();
+        if (!token) {
+            navigate("/signin");
+        }
         try {
             await putData("/cart", {
                 productId: product._id,

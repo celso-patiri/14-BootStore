@@ -3,6 +3,8 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ConfigContext from "../../contexts/ConfigContext";
 import UserContext from "../../contexts/UserContext";
+import AppContext from "../../contexts/AppContext";
+
 import { isValidEmail } from "../../utils/forms";
 import ErrorMessage from "../AuthPage/ErrorMessage.jsx";
 import Main from "../AuthPage/MainContainer.jsx";
@@ -15,9 +17,13 @@ export default function SignInPage() {
     const { apiLink } = useContext(ConfigContext);
     const { setUser, setToken, token } = useContext(UserContext);
 
+    const { setSelectedNavTab } = useContext(AppContext);
+
     useEffect(() => {
         if (token) navigate.current("/");
     }, [token]);
+
+    setSelectedNavTab("user");
 
     const [formInput, setFormInput] = useState({});
     const [inputErrors, setInputErrors] = useState([false, false, false, false]);
