@@ -1,5 +1,6 @@
 import { useEffect, useContext } from "react";
 import styled from "styled-components";
+import AppContext from "../../contexts/AppContext.js";
 
 import ConfigContext from "../../contexts/ConfigContext.js";
 import UserContext from "../../contexts/UserContext.js";
@@ -36,8 +37,13 @@ const Hello = styled.h1`
 `;
 
 export default function HomePage() {
+    const { setSelectedNavTab } = useContext(AppContext);
     const { user } = useContext(UserContext);
     const hello = `Bem vindo${user ? `, ${user.name}` : ""}!`;
+
+    useEffect(() => {
+        setSelectedNavTab("explore");
+    }, []);
 
     return (
         <Wrapper>

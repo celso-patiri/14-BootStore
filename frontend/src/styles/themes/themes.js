@@ -7,8 +7,8 @@ export const lightTheme = {
     hoverMain: "#197867",
 
     secondary: "#606060", // cor secundária
-    overSecondary: "#000", //
-    hoverSecondary: "C0C0C0",
+    overSecondary: "#fff", //
+    hoverSecondary: "#4a4949",
 
     special: "#DD4661", // cor do like, notificações
 

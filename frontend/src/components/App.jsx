@@ -29,7 +29,8 @@ export default function App() {
 
     // App Context
     const [theme, setTheme] = useState("light"); // 'light', 'dark'
-    const [selectedNavTab, setSelectedNavTab] = useState("explore"); // 'explore, likes, cart, user'
+    const [selectedNavTab, setSelectedNavTab] = useState(""); // 'explore, likes, cart, user'
+    const [userPageTab, setUserPageTab] = useState(""); // 'orders', 'settings'
 
     // User Data
     const [user, setUser] = useState(null);
@@ -96,7 +97,16 @@ export default function App() {
 
     return (
         <ConfigContext.Provider value={{ apiLink }}>
-            <AppContext.Provider value={{ theme, setTheme, selectedNavTab, setSelectedNavTab }}>
+            <AppContext.Provider
+                value={{
+                    theme,
+                    setTheme,
+                    selectedNavTab,
+                    setSelectedNavTab,
+                    userPageTab,
+                    setUserPageTab,
+                }}
+            >
                 <UserContext.Provider
                     value={{
                         user,
@@ -136,10 +146,11 @@ export default function App() {
                                         <Route path="success" element={<SuccessPage />}></Route>
                                     </Route>
                                     <Route path="user" element={<UserPage />}>
-                                        <Route path="settings" element={<SettingsPage />}></Route>
+                                        <Route index element={<OrdersPage />} />
                                         <Route path="orders" element={<OrdersPage />}>
                                             <Route path=":orderId" element={<OrderPage />}></Route>
                                         </Route>
+                                        <Route path="settings" element={<SettingsPage />}></Route>
                                     </Route>
                                 </Route>
                             </Routes>
