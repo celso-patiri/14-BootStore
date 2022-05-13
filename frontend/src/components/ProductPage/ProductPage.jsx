@@ -158,7 +158,6 @@ export default function ProductPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(`producr!!! `, `product/${productId}`);
         if (!product) {
             getData(`/products/${productId}`, setProduct);
         }
