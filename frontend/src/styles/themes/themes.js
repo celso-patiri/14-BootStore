@@ -7,8 +7,8 @@ export const lightTheme = {
     hoverMain: "#197867",
 
     secondary: "#606060", // cor secundária
-    overSecondary: "#000", //
-    hoverSecondary: "C0C0C0",
+    overSecondary: "#fff", //
+    hoverSecondary: "#4a4949",
 
     special: "#DD4661", // cor do like, notificações
 
@@ -18,7 +18,7 @@ export const lightTheme = {
 
     light: "#fff", // cor clara do tema
     gray: "#B0B0B0", // cor cinza do tema
-    lightGray: "#B0B0B0", // cor cinza do tema
+    lightGray: "#E2E2E2", // cor cinza do tema
     dark: "#000", // cor escura do tema
 
     simpleText: "#000", // cor de texto básico

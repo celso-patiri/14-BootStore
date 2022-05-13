@@ -3,7 +3,7 @@ import ProductThumb from "../Utils/ProductThumb";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/UserContext";
 import AppContext from "../../contexts/AppContext";
-import { useLinkClickHandler, useNavigate, useParams } from "react-router-dom";
+import { useLinkClickHandler, useNavigate, useParams, Link } from "react-router-dom";
 
 const Wrapper = styled.div`
     display: flex;
@@ -36,6 +36,10 @@ const Main = styled.div`
     gap: 25px;
     flex: 1 1 auto;
     overflow-y: auto;
+
+    p {
+        text-align: center;
+    }
 `;
 
 const Title = styled.div`
@@ -74,7 +78,7 @@ const PageTitle = styled.div``;
 
 export default function LikesPage() {
     const { setSelectedNavTab } = useContext(AppContext);
-    const { token, likes, setLikes, getData, postData, setCart } = useContext(UserContext);
+    const { token, user, likes, setLikes, getData, postData, setCart } = useContext(UserContext);
 
     useEffect(() => {
         setSelectedNavTab("likes");
@@ -91,6 +95,15 @@ export default function LikesPage() {
         })
     ) : (
         <></>
+    );
+
+    const noLikesMsg = (
+        <>
+            <p>Você ainda não tem nenhuma curtida.</p>
+            <p>
+                Que tal <Link to="/">explorar?</Link> um pouco?
+            </p>
+        </>
     );
 
     async function addAllToCart() {
@@ -110,7 +123,7 @@ export default function LikesPage() {
                 {likes && likes.length > 0 ? (
                     <Button onClick={addAllToCart}>Adicione todos ao carrinho</Button>
                 ) : (
-                    <></>
+                    noLikesMsg
                 )}
             </Main>
         </Wrapper>

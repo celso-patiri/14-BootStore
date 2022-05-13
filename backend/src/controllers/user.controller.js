@@ -36,9 +36,18 @@ export const findUser = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
+
+    const { userId } = res.locals.userInfo;
+    const { name, email, password } = req.body;
+
     try {
-        const { userId } = res.locals.userInfo;
-        await User.updateOne({ _id: userId }, req.body);
+        const newUserData = {
+            name: sanitizeHtml(name),
+            email: sanitizeHtml(email),
+            password: bcrypt.hashSync(sanitizeHtml(password), 10),
+        }
+        await User.updateOne({ _id: userId }, newUserData);
+        const user = await User.findOne({ _id: userId });
         res.status(204);
     } catch (err) {
         res.status(500).send({ error: err });
