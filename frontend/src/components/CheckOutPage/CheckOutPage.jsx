@@ -1,10 +1,11 @@
+import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
-import CartProduct from "../CartPage/CartProduct.jsx";
-import ConfigContext from "../../contexts/ConfigContext";
-import UserContext from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
+import ConfigContext from "../../contexts/ConfigContext";
+import UserContext from "../../contexts/UserContext";
+import Input from "../AuthPage/TextInput.jsx";
+import CartProduct from "../CartPage/CartProduct.jsx";
 
 const Wrapper = styled.div`
     display: flex;
@@ -86,8 +87,8 @@ const Button = styled.button`
     min-height: 3rem;
     height: 5rem;
     margin: 1rem;
-    background-color: ${({ theme, total }) => (total > 0 ? theme.main : theme.lightGray)};
-    cursor: ${({ total }) => (total > 0 ? "pointer" : "")};
+    background-color: ${({ theme, available }) => (available ? theme.main : theme.lightGray)};
+    cursor: ${({ available }) => (available ? "pointer" : "")};
 `;
 
 const BackButton = styled.div`
@@ -113,13 +114,23 @@ const BackButton = styled.div`
     }
 `;
 
+const Form = styled.form`
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: clamp(200px, 90%, 400px);
+`;
 export default function CheckOutPage() {
     const navigate = useRef(useNavigate());
 
     const { token } = useContext(UserContext);
     const { apiLink } = useContext(ConfigContext);
 
-    const [cart, setCart] = useState();
+    const [cart, setCart] = useState([]);
+    const [renderAdressForm, setRenderAdressForm] = useState(false);
+    const [adressInput, setAdressInput] = useState({});
 
     useEffect(() => {
         if (token) {
@@ -133,14 +144,32 @@ export default function CheckOutPage() {
     }, [token, apiLink]);
 
     const frete = 20;
-    const total = cart
-        ? cart.reduce((total, { quantity, productData }) => total + quantity * productData.price, 0)
-        : null;
+    const total = cart?.reduce(
+        (total, { quantity, productData }) => total + quantity * productData.price,
+        0
+    );
+
+    const handleInput = (e) => {
+        adressInput[e.target.name] = e.target.value;
+        setAdressInput({ ...adressInput });
+    };
+
+    const adressIsEmpty = !(adressInput.city && adressInput.street && adressInput.number);
 
     const postOrder = () => {
+        if (adressIsEmpty) return;
+
+        const adress = `
+        ${adressInput.city}
+        R. ${adressInput.street}, Nº ${adressInput.number} `;
+
         axios
-            .post(`${apiLink}/order`, { headers: { Authorization: `Bearer ${token}` } })
-            .then(({ data }) => setCart(data))
+            .post(
+                `${apiLink}/orders`,
+                { adress },
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+            .then(({ data }) => navigate.current("/order/success"))
             .catch(console.error);
     };
 
@@ -153,15 +182,43 @@ export default function CheckOutPage() {
                 </BackButton>
             </Header>
             <Main>
-                {cart?.map(({ productData, quantity }, index) => (
-                    <CartProduct
-                        productData={productData}
-                        setCart={setCart}
-                        quantity={quantity}
-                        index={index}
-                        key={index + productData.toString()}
-                    />
-                ))}
+                {renderAdressForm ? (
+                    <Form onSubmit={postOrder}>
+                        <Input
+                            type="text"
+                            placeholder="Cidade"
+                            name="city"
+                            onChange={handleInput}
+                            required
+                        />
+                        <Input
+                            type="text"
+                            placeholder="Rua"
+                            name="street"
+                            onChange={handleInput}
+                            required
+                        />
+                        <Input
+                            type="number"
+                            placeholder="Numero"
+                            name="number"
+                            onChange={handleInput}
+                            required
+                        />
+                    </Form>
+                ) : (
+                    <>
+                        {cart.map(({ productData, quantity }, index) => (
+                            <CartProduct
+                                productData={productData}
+                                setCart={setCart}
+                                quantity={quantity}
+                                index={index}
+                                key={index + productData.toString()}
+                            />
+                        ))}
+                    </>
+                )}
             </Main>
             {total > 0 && (
                 <SubTotal>
@@ -181,8 +238,11 @@ export default function CheckOutPage() {
                 <h1>Total</h1>
                 <p>{total && (frete + total).toFixed(2)}</p>
             </Total>
-            <Button onClick={() => total > 0 && navigate.current("/checkout")} total={total}>
-                Finalizar Compra
+            <Button
+                onClick={() => (renderAdressForm ? postOrder() : setRenderAdressForm(true))}
+                available={!renderAdressForm || (renderAdressForm && !adressIsEmpty)}
+            >
+                {renderAdressForm ? "Finalizar Compra" : "Escolher endereço"}
             </Button>
         </Wrapper>
     );

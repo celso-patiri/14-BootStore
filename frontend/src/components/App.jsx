@@ -139,9 +139,8 @@ export default function App() {
                                     ></Route>
                                     <Route path="likes" element={<LikesPage />}></Route>
                                     <Route path="cart" element={<CartPage />}></Route>
-                                    <Route path="checkout" element={<CheckOutPage />}>
-                                        <Route path="success" element={<SuccessPage />}></Route>
-                                    </Route>
+                                    <Route path="checkout" element={<CheckOutPage />} />
+                                    <Route path="order/success" element={<SuccessPage />}></Route>
                                     <Route path="user" element={<UserPage />}>
                                         <Route index element={<OrdersPage />} />
                                         <Route path="orders" element={<OrdersPage />} />
