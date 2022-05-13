@@ -54,26 +54,48 @@ const NavTab = styled.div`
 const Main = styled.div`
     width: 100%;
     flex: 1 1 auto;
+    max-width: 500px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
 `;
 
 export default function UserPage() {
     const { setSelectedNavTab, userPageTab, setUserPageTab } = useContext(AppContext);
-    const { token, likes, setLikes, getData, postData, setCart } = useContext(UserContext);
+    const { token, setToken, setUser, setLikes, setCart, setOrders } = useContext(UserContext);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         setSelectedNavTab("user");
+        navigate("./orders");
     }, [token]);
+
+    function logOut() {
+        if (window.confirm("Você quer sair?")) {
+            localStorage.removeItem("bootstore_token");
+            setToken(null);
+            setLikes(null);
+            setCart(null);
+            setUser(null);
+            setOrders(null);
+        }
+    }
 
     return (
         <Wrapper>
             <HeaderNav>
                 <NavTab selected={userPageTab === "orders"}>Pedidos</NavTab>
                 <NavTab selected={userPageTab === "settings"}>Cadastro</NavTab>
-                <NavTab selected={userPageTab === "log-off"}>Sair</NavTab>
+                <NavTab selected={userPageTab === "log-off"} onClick={logOut}>
+                    Sair
+                </NavTab>
             </HeaderNav>
-            <Main>{Outlet}</Main>
+            <Main>
+                <Outlet />
+            </Main>
         </Wrapper>
     );
 }

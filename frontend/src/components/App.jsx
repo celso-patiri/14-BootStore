@@ -147,9 +147,11 @@ export default function App() {
                                     </Route>
                                     <Route path="user" element={<UserPage />}>
                                         <Route index element={<OrdersPage />} />
-                                        <Route path="orders" element={<OrdersPage />}>
-                                            <Route path=":orderId" element={<OrderPage />}></Route>
-                                        </Route>
+                                        <Route path="orders" element={<OrdersPage />} />
+                                        <Route
+                                            path="orders/:orderId"
+                                            element={<OrderPage />}
+                                        ></Route>
                                         <Route path="settings" element={<SettingsPage />}></Route>
                                     </Route>
                                 </Route>
