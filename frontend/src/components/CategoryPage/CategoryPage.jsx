@@ -2,7 +2,9 @@ import styled from "styled-components";
 import ProductThumb from "../Utils/ProductThumb";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/UserContext";
+import ConfigContext from "../../contexts/ConfigContext";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const Wrapper = styled.div`
     display: flex;
@@ -23,6 +25,7 @@ const Header = styled.div`
     width: 100%;
     flex: 0 0 auto;
     z-index: 20;
+    gap: 30px;
 `;
 
 const Title = styled.div`
@@ -66,17 +69,44 @@ const Products = styled.div`
     align-content: start;
 `;
 
+const WalkButtons = styled.div`
+    display: flex;
+    gap: 10px;
+`;
+
+const WalkButton = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    :hover {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    ion-icon {
+        font-size: 15px;
+        --ionicon-stroke-width: 50px;
+    }
+    cursor: pointer;
+`;
+
 const PageTitle = styled.div``;
 
 export default function CategoryPage() {
     const { categoryName } = useParams();
 
     const [products, setProducts] = useState(null);
-    const [newProducts, setNewProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState(null);
-    const [lastPage, setLastPage] = useState(0);
-    const { getData } = useContext(UserContext);
+    const [pageIndex, setPageIndex] = useState(0);
+    const [lastPage, setLastPage] = useState(null);
+
+    const { token, getData } = useContext(UserContext);
+    const { apiLink } = useContext(ConfigContext);
 
     const navigate = useNavigate();
 
@@ -92,12 +122,61 @@ export default function CategoryPage() {
             );
         }
         if (!products) {
-            getData(`/products/category/${categoryName}`, setProducts);
+            getData(`/products/category/${categoryName}?skip=${10 * pageIndex}`, setProducts);
         }
     }, [categories]);
 
     async function backButtonPressed(event) {
         navigate(-1);
+    }
+
+    async function walkButtonPressed(forward) {
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+
+        let valorInicial = pageIndex;
+        let page = pageIndex;
+        let lastPageFound = lastPage;
+
+        let change = true;
+
+        try {
+            if (!lastPageFound) {
+                let promise = await axios.get(
+                    `${apiLink}/products/category/${categoryName}?skip=${10 * (page + 1)}`,
+                    config
+                );
+                if (promise.data.length === 0) {
+                    setLastPage(page + 1);
+                    lastPageFound = page + 1;
+                }
+            }
+
+            if (forward) {
+                if (lastPageFound && page + 1 >= lastPageFound) {
+                    page = 0;
+                } else {
+                    page += 1;
+                }
+            } else {
+                if (page - 1 < 0) {
+                    if (lastPageFound) {
+                        page = lastPageFound - 1;
+                    } else {
+                        change = false;
+                    }
+                } else {
+                    page = page - 1;
+                }
+            }
+            if (change && valorInicial != page) {
+                let promise = await axios.get(
+                    `${apiLink}/products/category/${categoryName}?skip=${10 * page}`,
+                    config
+                );
+                setProducts(promise.data);
+                setPageIndex(page);
+            }
+        } catch {}
     }
 
     const thumbs = products ? (
@@ -110,13 +189,49 @@ export default function CategoryPage() {
         <></>
     );
 
+    const walkBackwardButton = (
+        <WalkButton
+            onClick={() => {
+                walkButtonPressed(false);
+            }}
+        >
+            <ion-icon name="arrow-back-outline"></ion-icon>
+        </WalkButton>
+    );
+    const walkForwardButton = (
+        <WalkButton
+            onClick={() => {
+                walkButtonPressed(true);
+            }}
+        >
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+        </WalkButton>
+    );
+
+    const walkButtons =
+        lastPage && lastPage === 1 ? (
+            <></>
+        ) : (
+            <WalkButtons>
+                {!lastPage && pageIndex === 0 ? <></> : walkBackwardButton}
+                {walkForwardButton}
+            </WalkButtons>
+        );
+
     return (
         <Wrapper>
             <Header>
                 <BackButton onClick={backButtonPressed}>
                     <ion-icon name="chevron-back-outline"></ion-icon>
                 </BackButton>
-                {category ? <Title>{category.title}</Title> : <></>}
+                {category ? (
+                    <>
+                        <Title>{category.title}</Title>
+                        {walkButtons}
+                    </>
+                ) : (
+                    <></>
+                )}
             </Header>
             <Products>{thumbs}</Products>
         </Wrapper>

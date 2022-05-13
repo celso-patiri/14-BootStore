@@ -64,11 +64,10 @@ export default function App() {
     }, [token, user]);
 
     async function getData(url, setFunction) {
-        console.log(apiLink + url);
         const config = { headers: { Authorization: `Bearer ${token}` } };
         try {
             const promise = await axios.get(apiLink + url, config);
-            console.log("get " + url, promise.data);
+            // console.log("get " + url, promise.data);
             await setFunction(promise.data);
         } catch (err) {
             console.log(err);
@@ -76,7 +75,6 @@ export default function App() {
     }
 
     async function postData(url, body) {
-        console.log(apiLink + url);
         const config = { headers: { Authorization: `Bearer ${token}` } };
         try {
             const promise = await axios.post(apiLink + url, body, config);
@@ -86,7 +84,6 @@ export default function App() {
     }
 
     async function putData(url, body) {
-        console.log(`trying to put at ${apiLink + url}`, body);
         const config = { headers: { Authorization: `Bearer ${token}` } };
         try {
             const promise = await axios.put(apiLink + url, body, config);
