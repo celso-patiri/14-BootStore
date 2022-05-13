@@ -76,7 +76,13 @@ export default function OrdersPage() {
     return (
         <>
             <Title>Histórico de Pedidos</Title>
-            <Orders>{ordersElements}</Orders>
+            <Orders>
+                {orders
+                    ? orders.length > 0
+                        ? ordersElements
+                        : "Você não fez nenhum pedido ainda :/"
+                    : "Estamos checando os pedidos..."}
+            </Orders>
         </>
     );
 }
