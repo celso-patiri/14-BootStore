@@ -10,6 +10,7 @@ const Wrapper = styled.div`
     width: 100%;
     height: 100%;
     align-items: center;
+    overflow: hidden;
 `;
 
 const HeaderNav = styled.nav`
@@ -60,6 +61,7 @@ const Main = styled.div`
     flex-direction: column;
     gap: 20px;
     align-items: flex-start;
+    overflow: auto;
 `;
 
 export default function UserPage() {
@@ -87,8 +89,22 @@ export default function UserPage() {
     return (
         <Wrapper>
             <HeaderNav>
-                <NavTab selected={userPageTab === "orders"}>Pedidos</NavTab>
-                <NavTab selected={userPageTab === "settings"}>Cadastro</NavTab>
+                <NavTab
+                    selected={userPageTab === "orders"}
+                    onClick={() => {
+                        navigate("/user/orders/");
+                    }}
+                >
+                    Pedidos
+                </NavTab>
+                <NavTab
+                    selected={userPageTab === "settings"}
+                    onClick={() => {
+                        navigate("/user/settings/");
+                    }}
+                >
+                    Cadastro
+                </NavTab>
                 <NavTab selected={userPageTab === "log-off"} onClick={logOut}>
                     Sair
                 </NavTab>

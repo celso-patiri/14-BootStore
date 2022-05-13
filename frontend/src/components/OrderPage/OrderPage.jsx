@@ -4,6 +4,12 @@ import { useParams } from "react-router";
 import UserContext from "../../contexts/UserContext";
 import AppContext from "../../contexts/AppContext";
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
+
+const OrdersPageLink = styled.h1`
+    font-size: 14px;
+    font-weight: 600;
+`;
 
 const Title = styled.h1`
     font-size: 18px;
@@ -101,6 +107,9 @@ export default function OrderPage() {
 
     return (
         <>
+            <Link to="/user/orders/">
+                <OrdersPageLink>histórico</OrdersPageLink>
+            </Link>
             <Title>{title}</Title>
             <Products>{products}</Products>
         </>

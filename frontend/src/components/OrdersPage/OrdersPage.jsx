@@ -75,7 +75,7 @@ export default function OrdersPage() {
 
     return (
         <>
-            <Title>Pedidos</Title>
+            <Title>Histórico de Pedidos</Title>
             <Orders>{ordersElements}</Orders>
         </>
     );
