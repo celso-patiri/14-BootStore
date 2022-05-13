@@ -69,12 +69,37 @@ const Button = styled.button`
     cursor: ${({ total }) => (total > 0 ? "pointer" : "")};
 `;
 
+const EmptyCartMessage = styled.div`
+    margin: auto auto;
+    color: ${({ theme }) => theme.gray};
+    font-size: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const EmptyCartButton = styled.button`
+    align-self: center;
+    border-radius: 12px;
+    border-style: none;
+    color: ${({ theme }) => theme.overMain};
+    font-weight: 700;
+    font-size: 1rem;
+    width: 40%;
+    height: 3rem;
+    margin: 1rem;
+    background-color: ${({ theme }) => theme.main};
+    cursor: pointer;
+`;
+
 export default function CartPage() {
     const navigate = useRef(useNavigate());
+
     const { token } = useContext(UserContext);
     const { apiLink } = useContext(ConfigContext);
 
-    const [cart, setCart] = useState();
+    const [cart, setCart] = useState([]);
 
     useEffect(() => {
         if (token) {
@@ -87,35 +112,49 @@ export default function CartPage() {
         }
     }, [token, apiLink]);
 
-    const total = cart
-        ? cart.reduce((total, { quantity, productData }) => total + quantity * productData.price, 0)
-        : null;
+    const emptyCart = !cart.some((productIsNotNull) => productIsNotNull);
+    const total = cart.reduce(
+        (total, { quantity, productData }) => total + quantity * productData.price,
+        0
+    );
 
     return (
         <Wrapper>
             <Header>
                 <Title>Carrinho</Title>
             </Header>
-            <Main>
-                {cart &&
-                    cart.map(({ productData, quantity }, index) => (
-                        <CartProduct
-                            productData={productData}
-                            setCart={setCart}
-                            quantity={quantity}
-                            index={index}
-                            key={index + productData.toString()}
-                        />
-                    ))}
-            </Main>
-
-            <Total>
-                <h1>Total</h1>
-                <p>{total?.toFixed(2)}</p>
-            </Total>
-            <Button onClick={() => total > 0 && navigate.current("/checkout")} total={total}>
-                Checkout
-            </Button>
+            {emptyCart ? (
+                <EmptyCartMessage>
+                    <h2>Seu carrinho esta vazio :(</h2>
+                    <EmptyCartButton onClick={() => navigate.current("/")}>
+                        Ir as compras
+                    </EmptyCartButton>
+                </EmptyCartMessage>
+            ) : (
+                <>
+                    <Main>
+                        {cart.map(({ productData, quantity }, index) => (
+                            <CartProduct
+                                productData={productData}
+                                setCart={setCart}
+                                quantity={quantity}
+                                index={index}
+                                key={index + productData.toString()}
+                            />
+                        ))}
+                    </Main>
+                    <Total>
+                        <h1>Total</h1>
+                        <p>{total?.toFixed(2)}</p>
+                    </Total>
+                    <Button
+                        onClick={() => total > 0 && navigate.current("/checkout")}
+                        total={total}
+                    >
+                        Checkout
+                    </Button>
+                </>
+            )}
         </Wrapper>
     );
 }
