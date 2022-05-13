@@ -125,9 +125,11 @@ export default function App() {
                                         path="/categories/:categoryName"
                                         element={<CategoryPage />}
                                     />
-                                    <Route path="products" element={<ProductsPage />}>
-                                        <Route path=":productId" element={<ProductPage />}></Route>
-                                    </Route>
+                                    <Route path="products" element={<ProductsPage />} />
+                                    <Route
+                                        path="products/:productId"
+                                        element={<ProductPage />}
+                                    ></Route>
                                     <Route path="likes" element={<LikesPage />}></Route>
                                     <Route path="cart" element={<CartPage />}></Route>
                                     <Route path="checkout" element={<CheckOutPage />}>

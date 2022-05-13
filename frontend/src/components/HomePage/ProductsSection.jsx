@@ -47,7 +47,7 @@ export default function CategoriesSection() {
     }, []);
 
     const thumbs = products.map((product, index) => {
-        return <ProductThumb key={index} product={product} showCartButton={true}></ProductThumb>;
+        return <ProductThumb key={index} product={product} showCartButton={false}></ProductThumb>;
     });
 
     return (
