@@ -121,6 +121,7 @@ export default function ProductThumb({ product, showCartButton }) {
 
     useEffect(() => {
         if (likes) {
+            console.log({ likes });
             const likeProduct = likes.find((p) => {
                 return p._id === product._id;
             });
