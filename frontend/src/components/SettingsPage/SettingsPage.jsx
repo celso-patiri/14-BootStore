@@ -74,16 +74,17 @@ export default function SettingsPage() {
     };
 
     const handleInput = (e) => {
-        formInput[e.target.name] = e.target.value;
-        setFormInput(formInput);
+        let newForm = { ...formInput };
+        newForm[e.target.name] = e.target.value;
+        setFormInput(newForm);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!validateInput()) return setInputErrors([...inputErrors]);
-
         const { name, email, password } = formInput;
         putData("/user", { name, email, password });
+
         getData("/user", setUser);
     };
 
