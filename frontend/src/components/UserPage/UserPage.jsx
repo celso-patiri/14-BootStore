@@ -83,6 +83,7 @@ export default function UserPage() {
             setCart(null);
             setUser(null);
             setOrders(null);
+            navigate("/");
         }
     }
 

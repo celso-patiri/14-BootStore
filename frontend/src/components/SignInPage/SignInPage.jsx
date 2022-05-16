@@ -30,6 +30,7 @@ export default function SignInPage() {
 
     const [formInput, setFormInput] = useState({});
     const [inputErrors, setInputErrors] = useState([false, false, false, false]);
+    const [apiError, setApiError] = useState(null);
 
     const validateInput = () => {
         const { email, password } = formInput;
@@ -45,6 +46,8 @@ export default function SignInPage() {
     };
 
     const handleSubmit = (e) => {
+        setApiError(null);
+
         e.preventDefault();
         if (!validateInput()) return setInputErrors([...inputErrors]);
 
@@ -56,9 +59,15 @@ export default function SignInPage() {
                 setUser({ name, email });
                 setToken(token);
                 localStorage.setItem("bootstore_token", JSON.stringify(token));
+                navigate("/");
             })
-            .catch(console.error);
+            .catch((error) => {
+                console.log(error);
+                setApiError(error.response.data.error);
+            });
     };
+
+    const ApiErrorsEl = apiError ? <ErrorMessage isError={true}>{apiError}</ErrorMessage> : <></>;
 
     return (
         <Main>
@@ -84,6 +93,7 @@ export default function SignInPage() {
                 <ErrorMessage isError={inputErrors[1]}>
                     A senha deve ter pelo menos 4 caracteres
                 </ErrorMessage>
+                {ApiErrorsEl}
                 <Button onClick={handleSubmit}>Entrar</Button>
             </Form>
             <Link to="/signup">Não tem login? Cadastre-se!</Link>

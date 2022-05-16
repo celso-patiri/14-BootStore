@@ -38,7 +38,9 @@ export const findUser = async (req, res) => {
 export const updateUser = async (req, res) => {
 
     const { userId } = res.locals.userInfo;
-    const { name, email, password } = req.body;
+    let { name, email, password } = req.body;
+
+    console.log(name, email, password);
 
     try {
         const newUserData = {
@@ -48,7 +50,9 @@ export const updateUser = async (req, res) => {
         }
         await User.updateOne({ _id: userId }, newUserData);
         const user = await User.findOne({ _id: userId });
-        res.status(204);
+        console.log('vou enviar', user.name, user.email);
+        const objeto = { name: user.name, email: user.email };
+        res.status(200).send(objeto);
     } catch (err) {
         res.status(500).send({ error: err });
     }

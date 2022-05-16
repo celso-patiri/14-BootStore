@@ -14,10 +14,11 @@ import Input from "../AuthPage/TextInput.jsx";
 export default function SignUpPage() {
     const navigate = useRef(useNavigate());
     const { apiLink } = useContext(ConfigContext);
-    const { setUser, setToken } = useContext(UserContext);
+    const { setUser, setToken, token } = useContext(UserContext);
 
     const [formInput, setFormInput] = useState({});
-    const [inputErrors, setInputErrors, token] = useState([false, false, false, false]);
+    const [inputErrors, setInputErrors] = useState([false, false, false, false]);
+    const [apiError, setApiError] = useState(null);
 
     useEffect(() => {
         if (token) navigate.current("/");
@@ -39,6 +40,8 @@ export default function SignUpPage() {
     };
 
     const handleSubmit = (e) => {
+        setApiError(null);
+
         e.preventDefault();
         if (!validateInput()) return setInputErrors([...inputErrors]);
 
@@ -50,9 +53,15 @@ export default function SignUpPage() {
                 setUser({ name, email });
                 setToken({ token });
                 localStorage.setItem("bootstore_token", JSON.stringify(token));
+                navigate("/");
             })
-            .catch(console.error);
+            .catch((error) => {
+                console.log(error);
+                setApiError(error.response.data.error);
+            });
     };
+
+    const ApiErrorsEl = apiError ? <ErrorMessage isError={true}>{apiError}</ErrorMessage> : <></>;
 
     return (
         <Main>
@@ -96,6 +105,7 @@ export default function SignUpPage() {
                     error={inputErrors[3]}
                 />
                 <ErrorMessage isError={inputErrors[3]}>As senhas devem ser iguais</ErrorMessage>
+                {ApiErrorsEl}
                 <Button onClick={handleSubmit}>Cadastrar</Button>
             </Form>
             <Link to="/signin">Ja tem login? Clique para entrar</Link>

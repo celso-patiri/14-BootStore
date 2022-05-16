@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { UserContext } from "../../contexts/UserContext";
 import { ConfigContext } from "../../contexts/ConfigContext";
 import { AppContext } from "../../contexts/AppContext";
+import axios from "axios";
 
 import { isValidEmail } from "../../utils/forms";
 import ErrorMessage from "../AuthPage/ErrorMessage.jsx";
@@ -43,6 +44,12 @@ const Order = styled.div`
     cursor: pointer;
 `;
 
+const ApiMessage = styled.p`
+    color: ${({ success, theme }) => {
+        return success ? theme.right : theme.wrong;
+    }};
+`;
+
 export default function SettingsPage() {
     const { apiLink } = useContext(ConfigContext);
     const { setUserPageTab } = useContext(AppContext);
@@ -53,6 +60,8 @@ export default function SettingsPage() {
 
     const [formInput, setFormInput] = useState({});
     const [inputErrors, setInputErrors] = useState([false, false, false, false]);
+    const [apiMsg, setApiMsg] = useState(null);
+    const [wasSaved, setWasSaved] = useState(false);
 
     useEffect(() => {
         setUserPageTab("settings");
@@ -78,13 +87,29 @@ export default function SettingsPage() {
     };
 
     const handleSubmit = (e) => {
+        setApiMsg(null);
         e.preventDefault();
         if (!validateInput()) return setInputErrors([...inputErrors]);
-        const { name, email, password } = formInput;
-        putData("/user", { name, email, password });
+        let { name, email, password } = formInput;
 
-        getData("/user", setUser);
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+        axios
+            .put(`${apiLink}/user`, { name, email, password }, config)
+            .then(({ data }) => {
+                name = data.name;
+                email = data.email;
+                setUser({ name, email });
+                setApiMsg("O cadastro foi atualizado!");
+                setWasSaved(true);
+            })
+            .catch((error) => {
+                console.log(error);
+                setApiMsg("Não foi possível atualizar o cadastro.");
+                setWasSaved(false);
+            });
     };
+
+    const ApiMsgEl = apiMsg ? <ApiMessage success={wasSaved}>{apiMsg}</ApiMessage> : <></>;
 
     return (
         <>
@@ -131,6 +156,7 @@ export default function SettingsPage() {
                 />
                 <ErrorMessage isError={inputErrors[3]}>As senhas devem ser iguais</ErrorMessage>
                 <Button onClick={handleSubmit}>Cadastrar</Button>
+                {ApiMsgEl}
             </Form>
         </>
     );
