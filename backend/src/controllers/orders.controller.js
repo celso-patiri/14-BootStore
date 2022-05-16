@@ -1,9 +1,10 @@
-import { Order } from "../models/order.model.js"
+import { Order } from "../models/order.model.js";
 import dayjs from "dayjs";
 import { Product } from "../models/product.model.js";
-import sgMail from '@sendgrid/mail'
+import sgMail from "@sendgrid/mail";
 import { User } from "../models/user.model.js";
 
+const SG_API_KEY = process.env.SG_API_KEY;
 
 export const getOrdersFromUser = async (req, res) => {
     const { userId } = res.locals.userInfo;
@@ -14,7 +15,6 @@ export const getOrdersFromUser = async (req, res) => {
         res.status(500).send({ error: err });
     }
 };
-
 
 export const getOrderById = async (req, res) => {
     const { orderId } = req.params;
@@ -27,10 +27,8 @@ export const getOrderById = async (req, res) => {
     }
 };
 
-
 export const postUserOrder = async (req, res) => {
-
-    const { userId } = res.locals.userInfo
+    const { userId } = res.locals.userInfo;
     const { orderProducts } = res.locals;
     const { address } = req.body;
     const date = dayjs();
@@ -40,7 +38,6 @@ export const postUserOrder = async (req, res) => {
     let totalAmmount = 0.0;
 
     try {
-
         const user = await User.findOne({ _id: userId });
         const { email, name } = user;
 
@@ -54,37 +51,44 @@ export const postUserOrder = async (req, res) => {
                     quantity,
                     price: productData.price,
                     title: productData.title,
-                    thumbnail: productData.thumbnail
+                    thumbnail: productData.thumbnail,
                 };
             })
         );
 
         totalAmmount = cartAmmount + shippingAmmount;
         Order.create({
-            userId, date, address,
-            cartAmmount, shippingAmmount, totalAmmount,
-            products
+            userId,
+            date,
+            address,
+            cartAmmount,
+            shippingAmmount,
+            totalAmmount,
+            products,
         });
 
-
         let productsBody = ``;
-        products.forEach(p => {
-            productsBody += `<li>${p.title}: $${p.price} x ${p.quantity} = $${p.price * p.quantity}</li>`;
-        })
+        products.forEach((p) => {
+            productsBody += `<li>${p.title}: $${p.price} x ${p.quantity} = $${
+                p.price * p.quantity
+            }</li>`;
+        });
 
         let emailBody = `
         <h1>BootStore</h1>
         <p>Hey, <strong>${name}</strong>!</p>
-        <p>Seu pedido feito em ${dayjs(date).format("DD/MM")} já está sendo enviado para ${address}.</p>
+        <p>Seu pedido feito em ${dayjs(date).format(
+            "DD/MM"
+        )} já está sendo enviado para ${address}.</p>
         <p>O valor total foi de <strong>$${totalAmmount}</strong>. Veja os produtos</p>
         <ul>${productsBody}<ul>
         `;
 
-        sgMail.setApiKey('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');
+        sgMail.setApiKey(SG_API_KEY);
         const msg = {
             to: email,
-            from: 'estevamfurtado@gmail.com', // Use the email address or domain you verified above
-            subject: 'Seu pedido foi enviado!',
+            from: "estevamfurtado@gmail.com", // Use the email address or domain you verified above
+            subject: "Seu pedido foi enviado!",
             html: emailBody,
         };
 
@@ -93,14 +97,12 @@ export const postUserOrder = async (req, res) => {
         } catch (error) {
             console.error(error);
             if (error.response) {
-                console.error(error.response.body)
+                console.error(error.response.body);
             }
         }
 
         res.sendStatus(200);
-
     } catch (err) {
         res.status(500).send({ error: err });
     }
-
 };
