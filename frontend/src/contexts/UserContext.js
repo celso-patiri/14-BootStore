@@ -23,13 +23,13 @@ export function UserContextProvider({ children }) {
         }
         if (token) {
             if (!user) {
-                getData("/user", setUser);
+                getData("user", setUser);
             }
             if (!cart) {
-                getData("/cart", setCart);
+                getData("cart", setCart);
             }
             if (!likes) {
-                getData("/wishlist", setLikes);
+                getData("wishlist", setLikes);
             }
         } else {
             setUser(null);

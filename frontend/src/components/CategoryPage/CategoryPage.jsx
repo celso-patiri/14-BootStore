@@ -112,7 +112,7 @@ export default function CategoryPage() {
 
     useEffect(() => {
         if (categories.length === 0) {
-            getData(`/products/categories/`, setCategories);
+            getData(`products/categories/`, setCategories);
         }
         if (!category) {
             setCategory(
@@ -122,7 +122,7 @@ export default function CategoryPage() {
             );
         }
         if (!products) {
-            getData(`/products/category/${categoryName}?skip=${10 * pageIndex}`, setProducts);
+            getData(`products/category/${categoryName}?skip=${10 * pageIndex}`, setProducts);
         }
     }, [categories]);
 

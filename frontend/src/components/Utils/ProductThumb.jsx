@@ -149,12 +149,12 @@ export default function ProductThumb({ product, showCartButton }) {
             navigate("/signin");
         }
         try {
-            await putData("/wishlist", {
+            await putData("wishlist", {
                 productId: product._id,
                 action: isLiked ? "delete" : "add",
             });
             setIsLiked(!isLiked);
-            await getData("/wishlist", setLikes);
+            await getData("wishlist", setLikes);
         } catch (err) {
             return console.log(err.error);
         }
@@ -166,12 +166,12 @@ export default function ProductThumb({ product, showCartButton }) {
             navigate("/signin");
         }
         try {
-            await putData("/cart", {
+            await putData("cart", {
                 productId: product._id,
                 quantity: isInCart ? "0" : "1",
             });
             setIsInCart(!isInCart);
-            await getData("/cart", setCart);
+            await getData("cart", setCart);
         } catch (err) {
             return console.log(err.error);
         }

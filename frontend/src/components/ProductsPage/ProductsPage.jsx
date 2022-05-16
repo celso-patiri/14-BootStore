@@ -107,7 +107,7 @@ export default function ProductsPage() {
 
     useEffect(() => {
         if (!products) {
-            getData(`/products?skip=${10 * pageIndex}`, setProducts);
+            getData(`products?skip=${10 * pageIndex}`, setProducts);
         }
     }, []);
 

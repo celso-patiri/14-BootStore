@@ -37,7 +37,7 @@ export default function CategoriesSection() {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        getData("/products/categories", setCategories);
+        getData("products/categories", setCategories);
     }, []);
 
     const thumbs = categories.map((category, index) => {

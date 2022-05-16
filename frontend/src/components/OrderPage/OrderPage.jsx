@@ -77,7 +77,7 @@ export default function OrderPage() {
                 }
             });
         } else {
-            getData("/orders", setOrders);
+            getData("orders", setOrders);
         }
     }, [token, orders]);
 

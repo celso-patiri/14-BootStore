@@ -45,7 +45,7 @@ export default function OrdersPage() {
 
     useEffect(() => {
         setUserPageTab("orders");
-        getData("/orders", setOrders);
+        getData("orders", setOrders);
     }, [token]);
 
     function goToOrderPage(id) {

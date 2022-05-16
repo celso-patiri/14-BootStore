@@ -83,7 +83,7 @@ export default function LikesPage() {
     useEffect(() => {
         setSelectedNavTab("likes");
         if (token && !likes) {
-            getData(`/wishlist`, setLikes);
+            getData(`wishlist`, setLikes);
         }
     }, [token]);
 
@@ -108,8 +108,8 @@ export default function LikesPage() {
 
     async function addAllToCart() {
         try {
-            await postData("/wishlist/addToCart", {});
-            await getData("/cart", setCart);
+            await postData("wishlist/addToCart", {});
+            await getData("cart", setCart);
         } catch {}
     }
 
