@@ -1,7 +1,6 @@
 import { React, useState, useEffect, createContext, useContext, useRef } from "react";
 import { ConfigContext } from "./ConfigContext";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 export const UserContext = createContext();
 
@@ -14,6 +13,7 @@ export function UserContextProvider({ children }) {
     const [likes, setLikes] = useState(null);
     const [orders, setOrders] = useState(null);
 
+    const isMounted = useRef(true);
     useEffect(() => {
         if (!token) {
             const download = JSON.parse(localStorage.getItem("bootstore_token"));
@@ -31,11 +31,12 @@ export function UserContextProvider({ children }) {
             if (!likes) {
                 getData("wishlist", setLikes);
             }
-        } else {
+        } else if (isMounted.current) {
             setUser(null);
             setCart(null);
             setLikes(null);
         }
+        return () => (isMounted.current = false);
     }, [token, user]);
 
     async function getData(url, setFunction) {
