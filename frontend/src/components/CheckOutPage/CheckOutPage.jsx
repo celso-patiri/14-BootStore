@@ -122,13 +122,13 @@ const Form = styled.form`
     gap: 0.5rem;
     width: clamp(200px, 90%, 400px);
 `;
+
 export default function CheckOutPage() {
     const navigate = useRef(useNavigate());
 
-    const { token } = useContext(UserContext);
+    const { token, getData, cart, setCart, setLikes } = useContext(UserContext);
     const { apiLink } = useContext(ConfigContext);
 
-    const [cart, setCart] = useState([]);
     const [renderAdressForm, setRenderAdressForm] = useState(false);
     const [adressInput, setAdressInput] = useState({});
 
@@ -169,7 +169,11 @@ export default function CheckOutPage() {
                 { address },
                 { headers: { Authorization: `Bearer ${token}` } }
             )
-            .then(({ data }) => navigate.current("/order/success"))
+            .then(({ data }) => {
+                getData("wishlist", setLikes);
+                getData("cart", setCart);
+                navigate.current("/order/success");
+            })
             .catch(console.error);
     };
 

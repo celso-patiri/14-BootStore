@@ -96,10 +96,8 @@ const EmptyCartButton = styled.button`
 export default function CartPage() {
     const navigate = useRef(useNavigate());
 
-    const { token } = useContext(UserContext);
+    const { token, cart, setCart } = useContext(UserContext);
     const { apiLink } = useContext(ConfigContext);
-
-    const [cart, setCart] = useState([]);
 
     useEffect(() => {
         if (token) {

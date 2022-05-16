@@ -7,7 +7,6 @@ import { User } from "../models/user.model.js";
 
 export const getOrdersFromUser = async (req, res) => {
     const { userId } = res.locals.userInfo;
-    console.log(userId);
     try {
         const orders = await Order.find({ userId });
         res.status(201).send(orders);
@@ -88,8 +87,6 @@ export const postUserOrder = async (req, res) => {
             subject: 'Seu pedido foi enviado!',
             html: emailBody,
         };
-
-        console.log(msg);
 
         try {
             await sgMail.send(msg);

@@ -121,7 +121,6 @@ export default function ProductThumb({ product, showCartButton }) {
 
     useEffect(() => {
         if (likes) {
-            console.log({ likes });
             const likeProduct = likes.find((p) => {
                 return p._id === product._id;
             });
@@ -141,7 +140,7 @@ export default function ProductThumb({ product, showCartButton }) {
                 setIsInCart(false);
             }
         }
-    }, [cart, likes, token]);
+    }, [cart, likes, product, token]);
 
     async function likeButtonPressed(event) {
         event.stopPropagation();

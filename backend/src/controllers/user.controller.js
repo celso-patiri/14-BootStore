@@ -40,8 +40,6 @@ export const updateUser = async (req, res) => {
     const { userId } = res.locals.userInfo;
     let { name, email, password } = req.body;
 
-    console.log(name, email, password);
-
     try {
         const newUserData = {
             name: sanitizeHtml(name),
@@ -50,7 +48,6 @@ export const updateUser = async (req, res) => {
         }
         await User.updateOne({ _id: userId }, newUserData);
         const user = await User.findOne({ _id: userId });
-        console.log('vou enviar', user.name, user.email);
         const objeto = { name: user.name, email: user.email };
         res.status(200).send(objeto);
     } catch (err) {
