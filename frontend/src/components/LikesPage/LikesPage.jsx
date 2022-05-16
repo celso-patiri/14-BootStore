@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import ProductThumb from "../Utils/ProductThumb";
 import { useContext, useEffect, useState } from "react";
-import UserContext from "../../contexts/UserContext";
-import AppContext from "../../contexts/AppContext";
+import { UserContext } from "../../contexts/UserContext";
+import { AppContext } from "../../contexts/AppContext";
 import { useLinkClickHandler, useNavigate, useParams, Link } from "react-router-dom";
 
 const Wrapper = styled.div`

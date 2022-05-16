@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
-import AppContext from "../contexts/AppContext";
-import UserContext from "../contexts/UserContext";
+import { AppContext } from "../contexts/AppContext";
+import { UserContext } from "../contexts/UserContext";
 
 const View = styled.div`
     width: 100%;

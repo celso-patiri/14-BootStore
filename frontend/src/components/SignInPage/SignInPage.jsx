@@ -1,9 +1,11 @@
-import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import ConfigContext from "../../contexts/ConfigContext";
-import UserContext from "../../contexts/UserContext";
-import AppContext from "../../contexts/AppContext";
+
+import { ConfigContext } from "../../contexts/ConfigContext";
+import { UserContext } from "../../contexts/UserContext";
+import { AppContext } from "../../contexts/AppContext";
+
+import axios from "axios";
 
 import { isValidEmail } from "../../utils/forms";
 import ErrorMessage from "../AuthPage/ErrorMessage.jsx";

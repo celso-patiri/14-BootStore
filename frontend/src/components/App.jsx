@@ -1,9 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
 
-import ConfigContext from "../contexts/ConfigContext";
-import AppContext from "../contexts/AppContext";
-import UserContext from "../contexts/UserContext";
+import { ConfigContextProvider } from "../contexts/ConfigContext";
+import { AppContextProvider } from "../contexts/AppContext";
+import { UserContextProvider } from "../contexts/UserContext";
 
 import AppStructure from "./AppStructure";
 import HomePage from "./HomePage/HomePage.jsx";
@@ -20,107 +19,13 @@ import CheckOutPage from "./CheckOutPage/CheckOutPage";
 import SuccessPage from "./SuccessPage/SuccessPage";
 import OrdersPage from "./OrdersPage/OrdersPage.jsx";
 import OrderPage from "./OrderPage/OrderPage.jsx";
-import { useState } from "react";
 import Theme from "../styles/themes/Theme";
-import { useEffect } from "react";
 
 export default function App() {
-    const apiLink = "http://localhost:5000";
-
-    // App Context
-    const [theme, setTheme] = useState("light"); // 'light', 'dark'
-    const [selectedNavTab, setSelectedNavTab] = useState(""); // 'explore, likes, cart, user'
-    const [userPageTab, setUserPageTab] = useState(""); // 'orders', 'settings'
-
-    // User Data
-    const [user, setUser] = useState(null);
-    const [token, setToken] = useState(null);
-    const [cart, setCart] = useState(null);
-    const [likes, setLikes] = useState(null);
-    const [orders, setOrders] = useState(null);
-
-    useEffect(() => {
-        if (!token) {
-            const download = JSON.parse(localStorage.getItem("bootstore_token"));
-            if (download) {
-                setToken(download);
-            }
-        }
-        if (token) {
-            if (!user) {
-                getData("/user", setUser);
-            }
-            if (!cart) {
-                getData("/cart", setCart);
-            }
-            if (!likes) {
-                getData("/wishlist", setLikes);
-            }
-        } else {
-            setUser(null);
-            setCart(null);
-            setLikes(null);
-        }
-    }, [token, user]);
-
-    async function getData(url, setFunction) {
-        const config = { headers: { Authorization: `Bearer ${token}` } };
-        try {
-            const promise = await axios.get(apiLink + url, config);
-            // console.log("get " + url, promise.data);
-            await setFunction(promise.data);
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    async function postData(url, body) {
-        const config = { headers: { Authorization: `Bearer ${token}` } };
-        try {
-            const promise = await axios.post(apiLink + url, body, config);
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    async function putData(url, body) {
-        const config = { headers: { Authorization: `Bearer ${token}` } };
-        try {
-            const promise = await axios.put(apiLink + url, body, config);
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
     return (
-        <ConfigContext.Provider value={{ apiLink }}>
-            <AppContext.Provider
-                value={{
-                    theme,
-                    setTheme,
-                    selectedNavTab,
-                    setSelectedNavTab,
-                    userPageTab,
-                    setUserPageTab,
-                }}
-            >
-                <UserContext.Provider
-                    value={{
-                        user,
-                        setUser,
-                        token,
-                        setToken,
-                        cart,
-                        setCart,
-                        likes,
-                        setLikes,
-                        orders,
-                        setOrders,
-                        getData,
-                        postData,
-                        putData,
-                    }}
-                >
+        <ConfigContextProvider>
+            <AppContextProvider>
+                <UserContextProvider>
                     <Theme>
                         <BrowserRouter>
                             <Routes>
@@ -154,8 +59,8 @@ export default function App() {
                             </Routes>
                         </BrowserRouter>
                     </Theme>
-                </UserContext.Provider>
-            </AppContext.Provider>
-        </ConfigContext.Provider>
+                </UserContextProvider>
+            </AppContextProvider>
+        </ConfigContextProvider>
     );
 }

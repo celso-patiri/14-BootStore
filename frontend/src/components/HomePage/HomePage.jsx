@@ -1,9 +1,9 @@
 import { useEffect, useContext } from "react";
 import styled from "styled-components";
-import AppContext from "../../contexts/AppContext.js";
+import { AppContext } from "../../contexts/AppContext.js";
 
-import ConfigContext from "../../contexts/ConfigContext.js";
-import UserContext from "../../contexts/UserContext.js";
+import { ConfigContext } from "../../contexts/ConfigContext.js";
+import { UserContext } from "../../contexts/UserContext.js";
 
 import CategoriesSection from "./CategoriesSection";
 import ProductsSection from "./ProductsSection";

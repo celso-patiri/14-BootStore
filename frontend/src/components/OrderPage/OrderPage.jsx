@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useEffect, useContext, useState } from "react";
 import { useParams } from "react-router";
-import UserContext from "../../contexts/UserContext";
-import AppContext from "../../contexts/AppContext";
+import { UserContext } from "../../contexts/UserContext";
+import { AppContext } from "../../contexts/AppContext";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 

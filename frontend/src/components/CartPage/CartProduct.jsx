@@ -2,8 +2,8 @@ import axios from "axios";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import ConfigContext from "../../contexts/ConfigContext";
-import UserContext from "../../contexts/UserContext";
+import { ConfigContext } from "../../contexts/ConfigContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const Product = styled.article`
     display: flex;

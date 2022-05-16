@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { Outlet, useNavigate } from "react-router";
 import { useEffect, useContext, useState } from "react";
-import UserContext from "../../contexts/UserContext";
-import AppContext from "../../contexts/AppContext";
+import { UserContext } from "../../contexts/UserContext";
+import { AppContext } from "../../contexts/AppContext";
 
 const Wrapper = styled.div`
     display: flex;

@@ -1,11 +1,9 @@
 import styled from "styled-components";
 import { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router";
-import UserContext from "../../contexts/UserContext";
-import ConfigContext from "../../contexts/ConfigContext";
-import AppContext from "../../contexts/AppContext";
-import dayjs from "dayjs";
-import axios from "axios";
+import { UserContext } from "../../contexts/UserContext";
+import { ConfigContext } from "../../contexts/ConfigContext";
+import { AppContext } from "../../contexts/AppContext";
 
 import { isValidEmail } from "../../utils/forms";
 import ErrorMessage from "../AuthPage/ErrorMessage.jsx";

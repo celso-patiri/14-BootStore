@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import UserContext from "../../contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import styled from "styled-components";
 
 import CategoryThumb from "./CategoryThumb";

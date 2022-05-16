@@ -2,8 +2,8 @@ import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import ConfigContext from "../../contexts/ConfigContext";
-import UserContext from "../../contexts/UserContext";
+import { ConfigContext } from "../../contexts/ConfigContext";
+import { UserContext } from "../../contexts/UserContext";
 import Input from "../AuthPage/TextInput.jsx";
 import CartProduct from "../CartPage/CartProduct.jsx";
 
