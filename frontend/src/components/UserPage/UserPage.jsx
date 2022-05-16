@@ -77,7 +77,6 @@ export default function UserPage() {
             if (!localToken) navigate.current("/");
         } else {
             setSelectedNavTab("user");
-            navigate("./orders");
         }
     }, [token]);
 

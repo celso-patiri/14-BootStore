@@ -78,7 +78,6 @@ export default function AppStructure() {
     const { token, cart, likes } = useContext(UserContext);
 
     const [isLogged, setIsLogged] = useState(false);
-    const [hasLikedProducts, setHasLikedProducts] = useState(false);
     const [hasProductsInCart, setHasProductsInCart] = useState(false);
 
     const navigate = useNavigate();
