@@ -94,7 +94,7 @@ export default function SettingsPage() {
 
         const config = { headers: { Authorization: `Bearer ${token}` } };
         axios
-            .put(`${apiLink}/user`, { name, email, password }, config)
+            .put(`${apiLink}user`, { name, email, password }, config)
             .then(({ data }) => {
                 name = data.name;
                 email = data.email;

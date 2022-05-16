@@ -47,7 +47,7 @@ export default function SignUpPage() {
 
         const { name, email, password } = formInput;
         axios
-            .post(`${apiLink}/auth/signup`, { name, email, password })
+            .post(`${apiLink}auth/signup`, { name, email, password })
             .then(({ data }) => {
                 const { name, email, token } = data;
                 setUser({ name, email });

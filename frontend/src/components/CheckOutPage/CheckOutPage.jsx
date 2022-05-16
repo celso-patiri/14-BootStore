@@ -135,7 +135,7 @@ export default function CheckOutPage() {
     useEffect(() => {
         if (token) {
             axios
-                .get(`${apiLink}/cart`, { headers: { Authorization: `Bearer ${token}` } })
+                .get(`${apiLink}cart`, { headers: { Authorization: `Bearer ${token}` } })
                 .then(({ data }) => setCart(data))
                 .catch(console.error);
         } else {
@@ -159,14 +159,14 @@ export default function CheckOutPage() {
     const postOrder = () => {
         if (adressIsEmpty) return;
 
-        const adress = `
+        const address = `
         ${adressInput.city}
         R. ${adressInput.street}, Nº ${adressInput.number} `;
 
         axios
             .post(
-                `${apiLink}/orders`,
-                { adress },
+                `${apiLink}orders`,
+                { address },
                 { headers: { Authorization: `Bearer ${token}` } }
             )
             .then(({ data }) => navigate.current("/order/success"))

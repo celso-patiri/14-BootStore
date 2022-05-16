@@ -142,7 +142,7 @@ export default function CategoryPage() {
         try {
             if (!lastPageFound) {
                 let promise = await axios.get(
-                    `${apiLink}/products/category/${categoryName}?skip=${10 * (page + 1)}`,
+                    `${apiLink}products/category/${categoryName}?skip=${10 * (page + 1)}`,
                     config
                 );
                 if (promise.data.length === 0) {
@@ -170,7 +170,7 @@ export default function CategoryPage() {
             }
             if (change && valorInicial != page) {
                 let promise = await axios.get(
-                    `${apiLink}/products/category/${categoryName}?skip=${10 * page}`,
+                    `${apiLink}products/category/${categoryName}?skip=${10 * page}`,
                     config
                 );
                 setProducts(promise.data);

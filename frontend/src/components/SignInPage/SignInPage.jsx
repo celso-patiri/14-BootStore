@@ -53,7 +53,7 @@ export default function SignInPage() {
 
         const { email, password } = formInput;
         axios
-            .post(`${apiLink}/auth/signin`, { email, password })
+            .post(`${apiLink}auth/signin`, { email, password })
             .then(({ data }) => {
                 const { name, email, token } = data;
                 setUser({ name, email });

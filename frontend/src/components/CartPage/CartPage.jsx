@@ -104,7 +104,7 @@ export default function CartPage() {
     useEffect(() => {
         if (token) {
             axios
-                .get(`${apiLink}/cart`, { headers: { Authorization: `Bearer ${token}` } })
+                .get(`${apiLink}cart`, { headers: { Authorization: `Bearer ${token}` } })
                 .then(({ data }) => setCart(data))
                 .catch(console.error);
         } else {

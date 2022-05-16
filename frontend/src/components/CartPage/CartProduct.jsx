@@ -92,7 +92,7 @@ export default function CartProduct({ productData, quantity, setCart, index }) {
         });
         axios
             .put(
-                `${apiLink}/cart`,
+                `${apiLink}cart`,
                 { productId: productData._id, quantity: newQuantity },
                 { headers: { authorization: `Bearer ${token}` } }
             )

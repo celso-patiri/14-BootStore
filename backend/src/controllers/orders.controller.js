@@ -1,6 +1,9 @@
 import { Order } from "../models/order.model.js"
 import dayjs from "dayjs";
 import { Product } from "../models/product.model.js";
+import sgMail from '@sendgrid/mail'
+import { User } from "../models/user.model.js";
+
 
 export const getOrdersFromUser = async (req, res) => {
     const { userId } = res.locals.userInfo;
@@ -39,6 +42,9 @@ export const postUserOrder = async (req, res) => {
 
     try {
 
+        const user = await User.findOne({ _id: userId });
+        const { email, name } = user;
+
         const products = await Promise.all(
             orderProducts.map(async (product) => {
                 const { quantity, productId } = product;
@@ -61,7 +67,41 @@ export const postUserOrder = async (req, res) => {
             products
         });
 
+
+        let productsBody = ``;
+        products.forEach(p => {
+            productsBody += `<li>${p.title}: $${p.price} x ${p.quantity} = $${p.price * p.quantity}</li>`;
+        })
+
+        let emailBody = `
+        <h1>BootStore</h1>
+        <p>Hey, <strong>${name}</strong>!</p>
+        <p>Seu pedido feito em ${dayjs(date).format("DD/MM")} já está sendo enviado para ${address}.</p>
+        <p>O valor total foi de <strong>$${totalAmmount}</strong>. Veja os produtos</p>
+        <ul>${productsBody}<ul>
+        `;
+
+        sgMail.setApiKey('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');
+        const msg = {
+            to: email,
+            from: 'estevamfurtado@gmail.com', // Use the email address or domain you verified above
+            subject: 'Seu pedido foi enviado!',
+            html: emailBody,
+        };
+
+        console.log(msg);
+
+        try {
+            await sgMail.send(msg);
+        } catch (error) {
+            console.error(error);
+            if (error.response) {
+                console.error(error.response.body)
+            }
+        }
+
         res.sendStatus(200);
+
     } catch (err) {
         res.status(500).send({ error: err });
     }

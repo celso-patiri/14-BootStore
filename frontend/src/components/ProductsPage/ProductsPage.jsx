@@ -126,10 +126,7 @@ export default function ProductsPage() {
 
         try {
             if (!lastPageFound) {
-                let promise = await axios.get(
-                    `${apiLink}/products?skip=${10 * (page + 1)}`,
-                    config
-                );
+                let promise = await axios.get(`${apiLink}products?skip=${10 * (page + 1)}`, config);
                 if (promise.data.length === 0) {
                     setLastPage(page + 1);
                     lastPageFound = page + 1;
@@ -154,7 +151,7 @@ export default function ProductsPage() {
                 }
             }
             if (change && valorInicial != page) {
-                let promise = await axios.get(`${apiLink}/products?skip=${10 * page}`, config);
+                let promise = await axios.get(`${apiLink}products?skip=${10 * page}`, config);
                 setProducts(promise.data);
                 setPageIndex(page);
             }
