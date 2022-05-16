@@ -88,7 +88,7 @@ export default function UserPage() {
             setCart(null);
             setUser(null);
             setOrders(null);
-            navigate("/");
+            navigate.current("/");
         }
     }
 
@@ -98,7 +98,7 @@ export default function UserPage() {
                 <NavTab
                     selected={userPageTab === "orders"}
                     onClick={() => {
-                        navigate("/user/orders/");
+                        navigate.current("/user/orders/");
                     }}
                 >
                     Pedidos
@@ -106,7 +106,7 @@ export default function UserPage() {
                 <NavTab
                     selected={userPageTab === "settings"}
                     onClick={() => {
-                        navigate("/user/settings/");
+                        navigate.current("/user/settings/");
                     }}
                 >
                     Cadastro

@@ -59,7 +59,7 @@ export default function SignInPage() {
                 setUser({ name, email });
                 setToken(token);
                 localStorage.setItem("bootstore_token", JSON.stringify(token));
-                navigate("/");
+                navigate.current("/");
             })
             .catch((error) => {
                 console.log(error);
