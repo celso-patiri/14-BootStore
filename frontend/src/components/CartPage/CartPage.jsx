@@ -106,12 +106,13 @@ export default function CartPage() {
                 .then(({ data }) => setCart(data))
                 .catch(console.error);
         } else {
-            navigate.current("/signin");
+            const localToken = JSON.parse(localStorage.getItem("bootstore_token"));
+            if (!localToken) navigate.current("/");
         }
     }, [token, apiLink]);
 
-    const emptyCart = !cart.some((productIsNotNull) => productIsNotNull);
-    const total = cart.reduce(
+    const emptyCart = !cart?.some((productIsNotNull) => productIsNotNull);
+    const total = cart?.reduce(
         (total, { quantity, productData }) => total + quantity * productData.price,
         0
     );

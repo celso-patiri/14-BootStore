@@ -139,7 +139,8 @@ export default function CheckOutPage() {
                 .then(({ data }) => setCart(data))
                 .catch(console.error);
         } else {
-            navigate.current("/signin");
+            const localToken = JSON.parse(localStorage.getItem("bootstore_token"));
+            if (!localToken) navigate.current("/");
         }
     }, [token, apiLink]);
 
@@ -212,7 +213,7 @@ export default function CheckOutPage() {
                     </Form>
                 ) : (
                     <>
-                        {cart.map(({ productData, quantity }, index) => (
+                        {cart?.map(({ productData, quantity }, index) => (
                             <CartProduct
                                 productData={productData}
                                 setCart={setCart}

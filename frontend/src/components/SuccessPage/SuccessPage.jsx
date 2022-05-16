@@ -52,7 +52,10 @@ export default function SuccessPage() {
     const { token } = useContext(UserContext);
 
     useEffect(() => {
-        if (!token) navigate.current("/signin");
+        if (!token) {
+            const localToken = JSON.parse(localStorage.getItem("bootstore_token"));
+            if (!localToken) navigate.current("/");
+        }
     }, [token]);
 
     return (

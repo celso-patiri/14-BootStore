@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ProductThumb from "../Utils/ProductThumb";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { AppContext } from "../../contexts/AppContext";
 import { useLinkClickHandler, useNavigate, useParams, Link } from "react-router-dom";
@@ -79,8 +79,14 @@ const PageTitle = styled.div``;
 export default function LikesPage() {
     const { setSelectedNavTab } = useContext(AppContext);
     const { token, user, likes, setLikes, getData, postData, setCart } = useContext(UserContext);
+    const navigate = useRef(useNavigate());
 
     useEffect(() => {
+        if (!token) {
+            const localToken = JSON.parse(localStorage.getItem("bootstore_token"));
+            if (!localToken) navigate.current("/");
+        }
+
         setSelectedNavTab("likes");
         if (token && !likes) {
             getData(`wishlist`, setLikes);

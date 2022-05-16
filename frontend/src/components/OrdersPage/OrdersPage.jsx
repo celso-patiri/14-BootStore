@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import { useEffect, useContext, useState } from "react";
-import { useNavigate } from "react-router";
-import { UserContext } from "../../contexts/UserContext";
-import { AppContext } from "../../contexts/AppContext";
 import dayjs from "dayjs";
+import { useContext, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { AppContext } from "../../contexts/AppContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const Title = styled.h1`
     font-size: 18px;
@@ -41,15 +41,20 @@ export default function OrdersPage() {
     const { setUserPageTab } = useContext(AppContext);
     const { token, orders, setOrders, getData } = useContext(UserContext);
 
-    const navigate = useNavigate();
+    const navigate = useRef(useNavigate());
 
     useEffect(() => {
-        setUserPageTab("orders");
-        getData("orders", setOrders);
+        if (!token) {
+            const localToken = JSON.parse(localStorage.getItem("bootstore_token"));
+            if (!localToken) navigate.current("/");
+        } else {
+            setUserPageTab("orders");
+            getData("orders", setOrders);
+        }
     }, [token]);
 
     function goToOrderPage(id) {
-        navigate(`./${id}`);
+        navigate.current(`./${id}`);
     }
 
     const ordersElements = orders ? (
