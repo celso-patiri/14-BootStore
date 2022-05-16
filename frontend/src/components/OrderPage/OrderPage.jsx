@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState, useRef } from "react";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import { AppContext } from "../../contexts/AppContext";
 import dayjs from "dayjs";
@@ -64,20 +65,26 @@ const ProductPrice = styled.h1`
 
 export default function OrderPage() {
     const { orderId } = useParams();
+    const navigate = useRef(useNavigate());
     const { setUserPageTab } = useContext(AppContext);
     const { token, orders, setOrders, getData } = useContext(UserContext);
     const [order, setOrder] = useState(null);
 
     useEffect(() => {
-        setUserPageTab("orders");
-        if (orders) {
-            orders.forEach((ord) => {
-                if (ord._id === orderId) {
-                    setOrder(ord);
-                }
-            });
+        if (!token) {
+            const localToken = JSON.parse(localStorage.getItem("bootstore_token"));
+            if (!localToken) navigate.current("/");
         } else {
-            getData("orders", setOrders);
+            setUserPageTab("orders");
+            if (orders) {
+                orders.forEach((ord) => {
+                    if (ord._id === orderId) {
+                        setOrder(ord);
+                    }
+                });
+            } else {
+                getData("orders", setOrders);
+            }
         }
     }, [token, orders]);
 

@@ -1,11 +1,11 @@
-import { React, useState, useEffect, createContext, useContext } from 'react';
-import { ConfigContext } from './ConfigContext';
+import { React, useState, useEffect, createContext, useContext, useRef } from "react";
+import { ConfigContext } from "./ConfigContext";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const UserContext = createContext();
 
 export function UserContextProvider({ children }) {
-
     const { apiLink } = useContext(ConfigContext);
 
     const [user, setUser] = useState(null);
@@ -87,5 +87,5 @@ export function UserContextProvider({ children }) {
         >
             {children}
         </UserContext.Provider>
-    )
+    );
 }

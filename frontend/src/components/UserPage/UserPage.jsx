@@ -1,8 +1,9 @@
+import { useContext, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { Outlet } from "react-router";
 import styled from "styled-components";
-import { Outlet, useNavigate } from "react-router";
-import { useEffect, useContext, useState } from "react";
-import { UserContext } from "../../contexts/UserContext";
 import { AppContext } from "../../contexts/AppContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const Wrapper = styled.div`
     display: flex;
@@ -68,11 +69,16 @@ export default function UserPage() {
     const { setSelectedNavTab, userPageTab, setUserPageTab } = useContext(AppContext);
     const { token, setToken, setUser, setLikes, setCart, setOrders } = useContext(UserContext);
 
-    const navigate = useNavigate();
+    const navigate = useRef(useNavigate());
 
     useEffect(() => {
-        setSelectedNavTab("user");
-        navigate("./orders");
+        if (!token) {
+            const localToken = JSON.parse(localStorage.getItem("bootstore_token"));
+            if (!localToken) navigate.current("/");
+        } else {
+            setSelectedNavTab("user");
+            navigate("./orders");
+        }
     }, [token]);
 
     function logOut() {
